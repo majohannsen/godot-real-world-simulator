@@ -1,8 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://dxk6qusy0cfjf"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0huye"]
+size = Vector3(10, 10, 10)
 
 [sub_resource type="BoxMesh" id="BoxMesh_bcr1l"]
+size = Vector3(10, 10, 10)
 
 [node name="House" type="StaticBody3D"]
 
