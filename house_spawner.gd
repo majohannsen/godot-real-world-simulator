@@ -33,8 +33,8 @@ func handleOverpassResponse(result, response_code, headers, body):
 
 func latLonToCoordsInMeters(lat, lon):
 	return Vector2(
-		lon * earthCircumference / 360 * cos(deg_to_rad(lat)),
-		lat * earthCircumference / 360
+		lat * earthCircumference / 360,
+		lon * earthCircumference / 360 * cos(deg_to_rad(lat))
 	)
 
 func spawnHouse(coords: Vector2):
@@ -43,10 +43,21 @@ func spawnHouse(coords: Vector2):
 	add_child(inst)
 
 func setCameraPosition():
-	var coords: Vector2 = houses[0]
-	get_viewport().get_camera_3d().position.x = coords.x
+	var coords: Vector2 = calculateCameraPosition()
+	
+	get_viewport().get_camera_3d().position.x = coords.x-50
 	get_viewport().get_camera_3d().position.y = 100
-	get_viewport().get_camera_3d().position.z = coords.y+150
+	get_viewport().get_camera_3d().position.z = coords.y
+
+func calculateCameraPosition():
+	var x = houses[0].x
+	var y = 0
+	for house in houses:
+		y += house.y
+		if house.x < x:
+			x = house.x
+	y /= houses.size()
+	return Vector2(x,y)
 
 func spawnGround():
 	var coords: Vector2 = houses[0]
