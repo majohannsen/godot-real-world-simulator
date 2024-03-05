@@ -2,6 +2,7 @@ extends Node
 
 var house = preload("res://house.tscn")
 var ground = preload("res://ground.tscn")
+var street_shape = preload("res://street_shape.tscn")
 
 var earthCircumference = 40075000;
 
@@ -57,7 +58,8 @@ func calculateCameraPosition():
 		if house.x < x:
 			x = house.x
 	y /= houses.size()
-	return Vector2(x,y)
+	# return Vector2(x,y)
+	return Vector2(0,0)
 
 func spawnGround():
 	var coords: Vector2 = houses[0]
@@ -67,7 +69,16 @@ func spawnGround():
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	fetchCoordinates()
+	# fetchCoordinates()
+	var street = Path3D.new()
+	street.curve = Curve3D.new()
+	street.curve.add_point(Vector3(4,0,-6))
+	street.curve.add_point(Vector3(10,0,-2))
+	street.curve.add_point(Vector3(10,0,4))
+	street.curve.add_point(Vector3(6,0,4))
+	street.curve.add_point(Vector3(4,0,8))
+	street.add_child(street_shape.instantiate())
+	add_child(street)
 	
 
 #
