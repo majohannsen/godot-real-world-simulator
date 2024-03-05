@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://b0ui1d7h7cb1y"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_m428k"]
+size = Vector2(10000, 10000)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pagul"]
+albedo_color = Color(0, 0.462745, 0, 1)
+
+[node name="Ground" type="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_m428k")
+surface_material_override/0 = SubResource("StandardMaterial3D_pagul")
