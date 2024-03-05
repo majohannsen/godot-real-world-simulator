@@ -10,3 +10,5 @@ transform = Transform3D(1, -6.96995e-16, -2.00776e-17, 5.55349e-16, 0.778703, 0.
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.530229, -0.783182, 0.324783, 0.641563, 0.621052, 0.450213, -0.554305, -0.0303469, 0.83176, 0, 0, 0)
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]

@@ -7,14 +7,29 @@ var earthCircumference = 40075000;
 
 var houses: Array[Vector2] = []
 
+
 func fetchCoordinates():
-	houses.append(latLonToCoordsInMeters(47.4050971, 9.7426105))
-	houses.append(latLonToCoordsInMeters(47.4050583, 9.7436344))
-	houses.append(latLonToCoordsInMeters(47.4054232, 9.7430115))
-	houses.append(latLonToCoordsInMeters(47.4054460, 9.7426622))
-	houses.append(latLonToCoordsInMeters(47.4047326, 9.7424377))
-	houses.append(latLonToCoordsInMeters(47.4052588, 9.7428630))
-	houses.append(latLonToCoordsInMeters(47.4053796, 9.7431154))
+	var baseUrl = 'https://overpass-api.de/api/interpreter'+"?data=" 
+	var bbox = '[bbox:47.41903911416618,9.726977348327638,47.421456461055044,9.731220602989199]'
+	var out = '[out:json]'
+	var timeout = '[timeout:10]'
+	var query = bbox+out+timeout+';way[building];out center;'
+	print(baseUrl+query.uri_encode())
+	$HTTPRequest.request_completed.connect(handleOverpassResponse)
+	$HTTPRequest.request(baseUrl+query.uri_encode())
+	
+
+func handleOverpassResponse(result, response_code, headers, body):
+	var json = JSON.parse_string(body.get_string_from_utf8())
+	var buildings = json["elements"]
+	for building in buildings:
+		var lat = building["center"]["lat"]
+		var lon = building["center"]["lon"]
+		houses.append(latLonToCoordsInMeters(lat, lon))
+	for house in houses:
+		spawnHouse(house)
+	setCameraPosition()
+	spawnGround()
 
 func latLonToCoordsInMeters(lat, lon):
 	return Vector2(
@@ -42,10 +57,7 @@ func spawnGround():
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	fetchCoordinates()
-	for house in houses:
-		spawnHouse(house)
-	setCameraPosition()
-	spawnGround()
+	
 
 #
 ## Called every frame. 'delta' is the elapsed time since the previous frame.
