@@ -1,10 +1,9 @@
 extends Node
 
+const earthCircumference = 40075000
 var house = preload("res://house.tscn")
 var ground = preload("res://ground.tscn")
 var street_shape = preload("res://street_shape.tscn")
-
-var earthCircumference = 40075000;
 
 var houses: Array[Vector2] = []
 
@@ -29,8 +28,6 @@ func handleOverpassResponse(result, response_code, headers, body):
 		houses.append(latLonToCoordsInMeters(lat, lon))
 	for house in houses:
 		spawnHouse(house)
-	setCameraPosition()
-	spawnGround()
 
 func latLonToCoordsInMeters(lat, lon):
 	return Vector2(
@@ -43,42 +40,18 @@ func spawnHouse(coords: Vector2):
 	inst.transform.origin = Vector3(coords.x,0,coords.y)
 	add_child(inst)
 
-func setCameraPosition():
-	var coords: Vector2 = calculateCameraPosition()
-	
-	get_viewport().get_camera_3d().position.x = coords.x-50
-	get_viewport().get_camera_3d().position.y = 100
-	get_viewport().get_camera_3d().position.z = coords.y
-
-func calculateCameraPosition():
-	var x = houses[0].x
-	var y = 0
-	for house in houses:
-		y += house.y
-		if house.x < x:
-			x = house.x
-	y /= houses.size()
-	# return Vector2(x,y)
-	return Vector2(0,0)
-
-func spawnGround():
-	var coords: Vector2 = houses[0]
-	var inst: StaticBody3D = ground.instantiate()
-	inst.transform.origin = Vector3(coords.x,0,coords.y)
-	add_child(inst)
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	# fetchCoordinates()
-	var street = Path3D.new()
-	street.curve = Curve3D.new()
-	street.curve.add_point(Vector3(4,0,-6))
-	street.curve.add_point(Vector3(10,0,-2))
-	street.curve.add_point(Vector3(10,0,4))
-	street.curve.add_point(Vector3(6,0,4))
-	street.curve.add_point(Vector3(4,0,8))
-	street.add_child(street_shape.instantiate())
-	add_child(street)
+	fetchCoordinates()
+#	var street = Path3D.new()
+#	street.curve = Curve3D.new()
+#	street.curve.add_point(Vector3(4,0,-6))
+#	street.curve.add_point(Vector3(10,0,-2))
+#	street.curve.add_point(Vector3(10,0,4))
+#	street.curve.add_point(Vector3(6,0,4))
+#	street.curve.add_point(Vector3(4,0,8))
+#	street.add_child(street_shape.instantiate())
+#	add_child(street)
 	
 
 #
