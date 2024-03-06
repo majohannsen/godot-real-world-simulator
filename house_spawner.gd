@@ -3,7 +3,6 @@ extends Node
 const earthCircumference = 40075000
 var house = preload("res://house.tscn")
 var ground = preload("res://ground.tscn")
-var street_shape = preload("res://street_shape.tscn")
 
 var houses: Array[Vector2] = []
 
@@ -46,16 +45,7 @@ func spawnHouse(coords: Vector2):
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	fetchCoordinates()
-#	var street = Path3D.new()
-#	street.curve = Curve3D.new()
-#	street.curve.add_point(Vector3(4,0,-6))
-#	street.curve.add_point(Vector3(10,0,-2))
-#	street.curve.add_point(Vector3(10,0,4))
-#	street.curve.add_point(Vector3(6,0,4))
-#	street.curve.add_point(Vector3(4,0,8))
-#	street.add_child(street_shape.instantiate())
-#	add_child(street)
-	
+
 
 #
 ## Called every frame. 'delta' is the elapsed time since the previous frame.
