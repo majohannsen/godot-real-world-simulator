@@ -1,18 +1,20 @@
 extends Node
 
-@export var lat_span = 0.002417346889
-@export var lon_span = 0.004243254662
-@export var lat_center = 47.41903911
-@export var lon_center = 9.726977348
-
 const earthCircumference = 40075000
+const lat_span = 0.002417346889
+const lon_span = 0.004243254662
+const lat_center = 47.41903911
+const lon_center = 9.726977348
+
+var center = Vector2(latToMeter(lat_center), lonToMeter(lat_center, lon_center))
+
 var ground = preload("res://ground.tscn")
 
 func latLonToCoordsInMeters(lat, lon):
 	return Vector2(
 		latToMeter(lat),
 		lonToMeter(lat, lon)
-	)
+	) - center
 
 func latToMeter(lat):
 	return lat * earthCircumference / 360
@@ -23,14 +25,14 @@ func lonToMeter(lat, lon):
 func setCameraPosition():
 	var coords: Vector2 = calculateCameraPosition()
 	
-	get_viewport().get_camera_3d().position.x = coords.x-50
-	get_viewport().get_camera_3d().position.y = 100
-	get_viewport().get_camera_3d().position.z = coords.y
+	$Player.position.x = coords.x
+	$Player.position.y = 15
+	$Player.position.z = coords.y-20
 
 func calculateCameraPosition():
 	var x = latToMeter(lat_center)
 	var y = lonToMeter(lat_center, lon_center+lon_span/2)
-	return Vector2(x,y)
+	return Vector2(x,y) - center
 
 func spawnGround():
 	var inst: StaticBody3D = ground.instantiate()

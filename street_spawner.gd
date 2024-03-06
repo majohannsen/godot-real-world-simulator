@@ -6,9 +6,15 @@ var point_node = preload("res://point.tscn")
 
 var streets: Array = []
 
+@onready var main = get_parent()
+
 func fetchCoordinates():
+	var lat1 = main.lat_center - main.lat_span/2
+	var lat2 = main.lat_center + main.lat_span/2
+	var lon1 = main.lon_center - main.lon_span/2
+	var lon2 = main.lon_center + main.lon_span/2
 	var baseUrl = 'https://overpass-api.de/api/interpreter'+"?data=" 
-	var bbox = '[bbox:47.41903911416618,9.726977348327638,47.421456461055044,9.731220602989199]'
+	var bbox = "[bbox:%s,%s,%s,%s]" % [lat1,lon1,lat2,lon2]
 	var out = '[out:json]'
 	var timeout = '[timeout:10]'
 	var query = bbox+out+timeout+';way[highway];out geom;'
@@ -28,7 +34,7 @@ func handleOverpassResponse(result, response_code, headers, body):
 		for point in street["geometry"]:
 			var lat = point["lat"]
 			var lon = point["lon"]
-			points.append(latLonToCoordsInMeters(lat, lon))
+			points.append(main.latLonToCoordsInMeters(lat, lon))
 		streets.append(points)
 	for street in streets:
 		spawnStreet(street)
@@ -43,12 +49,6 @@ func spawnStreet(street: Array[Vector2]):
 		path.curve.add_point(Vector3(point.x,0.1,point.y))
 	path.add_child(street_shape.instantiate())
 	add_child(path)
-
-func latLonToCoordsInMeters(lat, lon):
-	return Vector2(
-		lat * earthCircumference / 360,
-		lon * earthCircumference / 360 * cos(deg_to_rad(lat))
-	)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
