@@ -21,6 +21,9 @@ func fetchCoordinates():
 
 func handleOverpassResponse(result, response_code, headers, body):
 	var json = JSON.parse_string(body.get_string_from_utf8())
+	if !json: 
+		print("Response is empty")
+		return
 	var buildings = json["elements"]
 	for building in buildings:
 		var lat = building["center"]["lat"]
