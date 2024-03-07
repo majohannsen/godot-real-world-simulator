@@ -23,20 +23,13 @@ func lonToMeter(lat, lon):
 	return lon * earthCircumference / 360 * cos(deg_to_rad(lat))
 
 func setCameraPosition():
-	var coords: Vector2 = calculateCameraPosition()
-	
-	$Player.position.x = coords.x
+	$Player.position.x = 0
 	$Player.position.y = 15
-	$Player.position.z = coords.y-20
-
-func calculateCameraPosition():
-	var x = latToMeter(lat_center)
-	var y = lonToMeter(lat_center, lon_center+lon_span/2)
-	return Vector2(x,y) - center
+	$Player.position.z = 0
 
 func spawnGround():
 	var inst: StaticBody3D = ground.instantiate()
-	inst.transform.origin = Vector3(latToMeter(lat_center),0,lonToMeter(lat_center, lon_center))
+	inst.transform.origin = Vector3(0,0,0)
 	add_child(inst)
 
 # Called when the node enters the scene tree for the first time.

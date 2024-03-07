@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bvldtgwmk0k77"
-path="res://.godot/imported/simplefps-icon.png-a02f5630f23431b972b09315cd902cef.ctex"
+path="res://.godot/imported/simplefps-icon.png-18edbbd5e9caea8dd9f239628ba16453.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://simplefps-icon.png"
-dest_files=["res://.godot/imported/simplefps-icon.png-a02f5630f23431b972b09315cd902cef.ctex"]
+source_file="res://assets/simple_fpsplayer/simplefps-icon.png"
+dest_files=["res://.godot/imported/simplefps-icon.png-18edbbd5e9caea8dd9f239628ba16453.ctex"]
 
 [params]
 
