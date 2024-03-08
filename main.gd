@@ -27,15 +27,21 @@ func setCameraPosition():
 	$Player.position.y = 150
 	$Player.position.z = 0
 
-func spawnGround():
+func spawnGround(chunk: Vector2):
+	var lat = lat_center + lat_span * chunk.x
+	var lon = lon_center + lon_span * chunk.y
+	var coords = latLonToCoordsInMeters(lat, lon)
 	var inst: StaticBody3D = ground.instantiate()
-	inst.transform.origin = Vector3(0,0,0)
+	inst.transform.origin = Vector3(coords.x,0,coords.y)
 	add_child(inst)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	setCameraPosition()
-	spawnGround()
+	spawnGround(Vector2(0,0))
+	spawnGround(Vector2(0,1))
+	spawnGround(Vector2(1,0))
+	spawnGround(Vector2(1,1))
 
 #
 ## Called every frame. 'delta' is the elapsed time since the previous frame.

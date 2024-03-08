@@ -22,7 +22,6 @@ func fetchCoordinates(chunk: Vector2):
 	add_child(request)
 	request.request_completed.connect(handleOverpassResponse)
 	request.request(baseUrl+query.uri_encode())
-	
 
 func handleOverpassResponse(result, response_code, headers, body):
 	var json = JSON.parse_string(body.get_string_from_utf8())
