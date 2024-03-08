@@ -1,8 +1,8 @@
 extends Node
 
 const earthCircumference = 40075000
-const lat_span = 0.002417346889
-const lon_span = 0.004243254662
+const lat_span = 0.01
+const lon_span = 0.01
 const lat_center = 47.41903911
 const lon_center = 9.726977348
 
@@ -24,7 +24,7 @@ func lonToMeter(lat, lon):
 
 func setCameraPosition():
 	$Player.position.x = 0
-	$Player.position.y = 15
+	$Player.position.y = 150
 	$Player.position.z = 0
 
 func spawnGround():

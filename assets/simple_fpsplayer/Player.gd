@@ -3,7 +3,7 @@ extends CharacterBody3D
 const ACCEL = 10
 const DEACCEL = 30
 
-const SPEED = 5.0
+const SPEED = 500
 const SPRINT_MULT = 2
 const JUMP_VELOCITY = 4.5
 const MOUSE_SENSITIVITY = 0.06
@@ -50,10 +50,13 @@ func _input(event):
 				flashlight.show()
 
 func _physics_process(delta):
+	# log position
+	print("Player position: ",self.transform.origin)
+	
 	var moving = false
 	# Add the gravity. Pulls value from project settings.
-	if not is_on_floor():
-		velocity.y -= gravity * delta
+#	if not is_on_floor():
+#		velocity.y -= gravity * delta
 
 	# Handle Jump.
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
