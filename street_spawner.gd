@@ -1,12 +1,10 @@
 extends Node
 
-const earthCircumference = 40075000
 var street_shape = preload("res://street_shape.tscn")
-var point_node = preload("res://point.tscn")
-
-var streets: Array = []
 
 @onready var main = get_parent()
+
+var streets: Array = []
 
 func fetchCoordinates(chunk: Vector2):
 	var lat1 = main.lat_center - main.lat_span/2 + main.lat_span * chunk.x
@@ -44,21 +42,6 @@ func spawnStreet(street: Array[Vector2]):
 	var path = Path3D.new()
 	path.curve = Curve3D.new()
 	for point in street:
-#		var node = point_node.instantiate()
-#		node.transform.origin = Vector3(point.x,0.1,point.y)
-#		add_child(node)
 		path.curve.add_point(Vector3(point.x,0.1,point.y))
 	path.add_child(street_shape.instantiate())
 	add_child(path)
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	fetchCoordinates(Vector2(0,0))
-	fetchCoordinates(Vector2(1,0))
-	fetchCoordinates(Vector2(0,1))
-	fetchCoordinates(Vector2(1,1))
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass

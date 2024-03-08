@@ -10,6 +10,9 @@ var center = Vector2(latToMeter(lat_center), lonToMeter(lat_center, lon_center))
 
 var ground = preload("res://ground.tscn")
 
+@onready var groundSpawner = $GroundSpawner
+@onready var street
+
 func latLonToCoordsInMeters(lat, lon):
 	return Vector2(
 		latToMeter(lat),
@@ -27,21 +30,18 @@ func setCameraPosition():
 	$Player.position.y = 150
 	$Player.position.z = 0
 
-func spawnGround(chunk: Vector2):
-	var lat = lat_center + lat_span * chunk.x
-	var lon = lon_center + lon_span * chunk.y
-	var coords = latLonToCoordsInMeters(lat, lon)
-	var inst: StaticBody3D = ground.instantiate()
-	inst.transform.origin = Vector3(coords.x,0,coords.y)
-	add_child(inst)
+func spawnChunk(chunk: Vector2):
+	$GroundSpawner.spawnGround(chunk)
+	$StreetSpawner.fetchCoordinates(chunk)
+	$HouseSpawner.fetchCoordinates(chunk)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	setCameraPosition()
-	spawnGround(Vector2(0,0))
-	spawnGround(Vector2(0,1))
-	spawnGround(Vector2(1,0))
-	spawnGround(Vector2(1,1))
+	spawnChunk(Vector2(0,0))
+	spawnChunk(Vector2(0,1))
+	spawnChunk(Vector2(1,0))
+	spawnChunk(Vector2(1,1))
 
 #
 ## Called every frame. 'delta' is the elapsed time since the previous frame.

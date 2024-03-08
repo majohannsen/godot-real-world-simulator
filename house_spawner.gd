@@ -1,11 +1,10 @@
 extends Node
 
 var house = preload("res://house.tscn")
-var ground = preload("res://ground.tscn")
-
-var houses: Array[Vector2] = []
 
 @onready var main = get_parent()
+
+var houses: Array[Vector2] = []
 
 func fetchCoordinates(chunk: Vector2):
 	var lat1 = main.lat_center - main.lat_span/2 + main.lat_span * chunk.x
@@ -40,16 +39,3 @@ func spawnHouse(coords: Vector2):
 	var inst: StaticBody3D = house.instantiate()
 	inst.transform.origin = Vector3(coords.x,0,coords.y)
 	add_child(inst)
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	fetchCoordinates(Vector2(0,0))
-	fetchCoordinates(Vector2(1,0))
-	fetchCoordinates(Vector2(0,1))
-	fetchCoordinates(Vector2(1,1))
-
-
-#
-## Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
