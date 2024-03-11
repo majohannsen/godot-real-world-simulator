@@ -51,7 +51,7 @@ func _input(event):
 
 func _physics_process(delta):
 	# log position
-	print("Player position: ",self.transform.origin)
+#	print("Player position: ",self.transform.origin)
 	
 	var moving = false
 	# Add the gravity. Pulls value from project settings.
