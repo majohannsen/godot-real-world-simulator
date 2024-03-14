@@ -36,7 +36,8 @@ func handleOverpassResponse(result, response_code, headers, body):
 			points.append(main.latLonToCoordsInMeters(lat, lon))
 		streets.append(points)
 	for street in streets:
-		spawnStreet(street)
+		await get_tree().create_timer(0.0001).timeout
+		await spawnStreet(street)
 
 func spawnStreet(street: Array[Vector2]):
 	var path = Path3D.new()

@@ -12,7 +12,6 @@ var center = Vector2(latToMeter(lat_center), lonToMeter(lat_center, lon_center))
 var ground = preload("res://ground.tscn")
 
 @onready var groundSpawner = $GroundSpawner
-@onready var street
 
 var loadedChunks: Array[String] = []
 
