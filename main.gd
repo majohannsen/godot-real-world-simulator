@@ -1,8 +1,9 @@
 extends Node
 
 const earthCircumference = 40075000
-const lat_span = 0.01
-const lon_span = 0.01
+const chunk_size = 1000
+const lat_span = chunk_size / 100000.0
+const lon_span = chunk_size / 100000.0
 const lat_center = 47.41903911
 const lon_center = 9.726977348
 
@@ -42,14 +43,13 @@ func getCurrentChunk():
 	var gamecoords = $Player.transform.origin
 	# doesnt work right (offset) probably need meter to lat lon
 	var coords = latLonToCoordsInMeters(lat_center, lon_center) + Vector2(gamecoords.x, gamecoords.z)
-	currentChunk.x = round(coords.x/1000) 
-	currentChunk.y = round(coords.y/1000) 
+	currentChunk.x = round(coords.x/chunk_size) 
+	currentChunk.y = round(coords.y/chunk_size) 
 	return currentChunk
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	setCameraPosition()
-	print(loadedChunks)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
