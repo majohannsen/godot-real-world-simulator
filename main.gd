@@ -13,7 +13,7 @@ var ground = preload("res://ground.tscn")
 
 @onready var groundSpawner = $GroundSpawner
 
-var loadedChunks: Array[String] = []
+var loadedChunks: Dictionary = {}
 
 func latLonToCoordsInMeters(lat, lon):
 	return Vector2(
@@ -52,6 +52,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if loadedChunks.find(str(getCurrentChunk())) == -1:
-		loadedChunks.append(str(getCurrentChunk()))
+	if !loadedChunks.has(getCurrentChunk()):
+		loadedChunks[getCurrentChunk()] = true
 		spawnChunk(getCurrentChunk())
+		print(loadedChunks)

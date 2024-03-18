@@ -33,7 +33,7 @@ func handleOverpassResponse(result, response_code, headers, body):
 		var lon = building["center"]["lon"]
 		houses.append(main.latLonToCoordsInMeters(lat, lon))
 	for house in houses:
-		await get_tree().create_timer(0.0001).timeout
+		await get_tree().create_timer(0).timeout
 		await spawnHouse(house)
 
 func spawnHouse(coords: Vector2):
