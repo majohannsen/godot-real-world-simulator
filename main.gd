@@ -29,6 +29,24 @@ func latLonToCoordsInMeters(lat, lon):
 		lonToMeter(lat, lon)
 	) - center
 
+func getChunkWidth():
+	var lat1 = lat_center - lat_span/2  
+	var lat2 = lat_center + lat_span/2  
+	var lon1 = lon_center - lon_span/2 
+	var lon2 = lon_center + lon_span/2 
+	var pos1 = latLonToCoordsInMeters(lat1, lon1)
+	var pos2 = latLonToCoordsInMeters(lat2, lon2)
+	return pos2.x - pos1.x
+
+func getChunkHeight():
+	var lat1 = lat_center - lat_span/2  
+	var lat2 = lat_center + lat_span/2  
+	var lon1 = lon_center - lon_span/2 
+	var lon2 = lon_center + lon_span/2 
+	var pos1 = latLonToCoordsInMeters(lat1, lon1)
+	var pos2 = latLonToCoordsInMeters(lat2, lon2)
+	return pos2.y - pos1.y
+
 ## use Web Mercator projection
 
 func latToMeter(lat):
@@ -52,8 +70,8 @@ func getCurrentChunk():
 	var gamecoords = $Player.transform.origin
 	# doesnt work right (offset) probably need meter to lat lon
 	var coords = latLonToCoordsInMeters(lat_center, lon_center) + Vector2(gamecoords.x, gamecoords.z)
-	currentChunk.x = round(coords.x/chunk_size) 
-	currentChunk.y = round(coords.y/chunk_size) 
+	currentChunk.x = round(coords.x/getChunkWidth()) 
+	currentChunk.y = round(coords.y/getChunkHeight()) 
 	return currentChunk
 
 # Called when the node enters the scene tree for the first time.
