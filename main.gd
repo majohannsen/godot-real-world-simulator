@@ -68,7 +68,6 @@ func spawnChunk(chunk: Vector2):
 func getCurrentChunk():
 	var currentChunk = Vector2()
 	var gamecoords = $Player.transform.origin
-	# doesnt work right (offset) probably need meter to lat lon
 	var coords = latLonToCoordsInMeters(lat_center, lon_center) + Vector2(gamecoords.x, gamecoords.z)
 	currentChunk.x = round(coords.x/getChunkWidth()) 
 	currentChunk.y = round(coords.y/getChunkHeight()) 
