@@ -4,10 +4,10 @@ const earthCircumference = 40075000
 const chunk_size = 1000
 const lat_span = chunk_size / 100000.0
 const lon_span = chunk_size / 100000.0
-#const lat_center = 47.41903911
-#const lon_center = 9.726977348
-const lat_center = 67.831433
-const lon_center = 20.277365
+const lat_center = 47.41903911
+const lon_center = 9.726977348
+#const lat_center = 67.831433
+#const lon_center = 20.277365
 
 var center = Vector2(latToMeter(lat_center), lonToMeter(lat_center, lon_center))
 
@@ -18,12 +18,6 @@ var ground = preload("res://ground.tscn")
 var loadedChunks: Dictionary = {}
 
 func latLonToCoordsInMeters(lat, lon):
-	print(lat, " ", lon)
-	print(log(tan(PI/4 + lat/2)))
-	print(Vector2(
-		latToMeter(lat),
-		lonToMeter(lat, lon)
-	))
 	return Vector2(
 		latToMeter(lat),
 		lonToMeter(lat, lon)
@@ -50,10 +44,12 @@ func getChunkHeight():
 ## use Web Mercator projection
 
 func latToMeter(lat):
-	return -floor((1/(2*PI))*pow(2, 17.5)*(PI-(log(tan(PI/4 + lat/2)))))
+	var latInRad = lat*PI/180
+	return floor((1/(2*PI))*(earthCircumference/2)*((log(tan(PI/4 + latInRad/2)))))
 
 func lonToMeter(lat, lon):
-	return floor((1/(2*PI))*pow(2, 17.5)*(PI+lon))
+	var lonInRad = lon*PI/180
+	return floor((1/(2*PI))*(earthCircumference/2)*(lonInRad))
 
 func setCameraPosition():
 	$Player.position.x = 0
