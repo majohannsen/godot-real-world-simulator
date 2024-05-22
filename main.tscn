@@ -1,13 +1,14 @@
-[gd_scene load_steps=9 format=3 uid="uid://ong4vy8hl0oj"]
+[gd_scene load_steps=10 format=3 uid="uid://ong4vy8hl0oj"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_ag4ow"]
 [ext_resource type="Script" path="res://objects/house/house_spawner.gd" id="1_p5w3m"]
 [ext_resource type="Script" path="res://objects/street/street_spawner.gd" id="3_6dvfo"]
 [ext_resource type="PackedScene" uid="uid://dgpjxoygnvyy4" path="res://assets/simple_fpsplayer/Player.tscn" id="4_0w385"]
 [ext_resource type="Script" path="res://objects/ground/ground_spawner.gd" id="5_k1k1w"]
-[ext_resource type="Script" path="res://objects/street_light/street_light_spawner.gd" id="6_yn5pq"]
+[ext_resource type="Script" path="res://objects/hydrant/street_light_spawner.gd" id="6_yn5pq"]
 [ext_resource type="Script" path="res://objects/tree/tree_spawner.gd" id="7_1wcdc"]
 [ext_resource type="Script" path="res://objects/trash_basket/trash_basket_spawner.gd" id="8_lhwwb"]
+[ext_resource type="Script" path="res://objects/street_light/hydrant_spawner.gd" id="9_4vret"]
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_ag4ow")
@@ -37,3 +38,6 @@ script = ExtResource("7_1wcdc")
 
 [node name="TrashBasketSpawner" type="Node3D" parent="."]
 script = ExtResource("8_lhwwb")
+
+[node name="HydrantSpawner" type="Node3D" parent="."]
+script = ExtResource("9_4vret")

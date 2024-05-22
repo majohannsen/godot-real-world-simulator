@@ -63,6 +63,7 @@ func spawnChunk(chunk: Vector2):
 	$StreetLightSpawner.fetchCoordinates(chunk)
 	$TreeSpawner.fetchCoordinates(chunk)
 	$TrashBasketSpawner.fetchCoordinates(chunk)
+	$HydrantSpawner.fetchCoordinates(chunk)
 
 func getCurrentChunk():
 	var currentChunk = Vector2()
