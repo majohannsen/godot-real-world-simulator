@@ -53,7 +53,7 @@ func lonToMeter(lat, lon):
 
 func setCameraPosition():
 	$Player.position.x = 0
-	$Player.position.y = 150
+	$Player.position.y = 15
 	$Player.position.z = 0
 
 func spawnChunk(chunk: Vector2):

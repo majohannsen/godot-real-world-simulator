@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://c6ity4ghvafku"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionPolygon3D" type="CollisionPolygon3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, -1.5246e-23, -1.5246e-23, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+depth = 3.0
+polygon = PackedVector2Array(1, 2.08165e-12, 1, 1, 0, 0)
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, -1.5246e-23, -1.5246e-23, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+polygon = PackedVector2Array(0, 0, 1, 1, 1, 0)
+depth = 3.0
