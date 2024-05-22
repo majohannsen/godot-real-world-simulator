@@ -1,6 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://b0l118j4k7f32"]
+[gd_scene load_steps=5 format=3 uid="uid://b12r4lwkpbnct"]
 
-[ext_resource type="PackedScene" uid="uid://dovs5nkvwglou" path="res://objects/street_light/street_light.glb" id="1_equ7o"]
+[ext_resource type="PackedScene" uid="uid://duy6cgteunjkw" path="res://objects/tree/tree.glb" id="1_7fkos"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0huye"]
 size = Vector3(10, 10, 10)
@@ -25,5 +25,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 5, 2.08165e-12)
 visible = false
 mesh = SubResource("BoxMesh_bcr1l")
 
-[node name="street_light" parent="." instance=ExtResource("1_equ7o")]
-transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0, 0)
+[node name="tree" parent="." instance=ExtResource("1_7fkos")]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 6.12722, 0)
