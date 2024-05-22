@@ -1,11 +1,11 @@
 [gd_scene load_steps=36 format=3 uid="uid://c3sccy6x0ht5j"]
 
-[ext_resource type="Script" path="res://examples_dd3d/DebugDrawDemoScene.gd" id="1"]
-[ext_resource type="FontFile" uid="uid://erdgllynwqkw" path="res://examples_dd3d/Roboto-Bold.ttf" id="2_aedbq"]
-[ext_resource type="Script" path="res://examples_dd3d/demo_camera_movement.gd" id="3_3m1mp"]
-[ext_resource type="Script" path="res://examples_dd3d/demo_music_visualizer.gd" id="4_eq2lt"]
-[ext_resource type="Script" path="res://examples_dd3d/demo_settings_panel.gd" id="5_31v5h"]
-[ext_resource type="Script" path="res://examples_dd3d/demo_web_docs_version_select.gd" id="6_07f7q"]
+[ext_resource type="Script" path="res://addons/debug_draw_3d/examples_dd3d/DebugDrawDemoScene.gd" id="1"]
+[ext_resource type="FontFile" uid="uid://erdgllynwqkw" path="res://addons/debug_draw_3d/examples_dd3d/Roboto-Bold.ttf" id="2_aedbq"]
+[ext_resource type="Script" path="res://addons/debug_draw_3d/examples_dd3d/demo_camera_movement.gd" id="3_3m1mp"]
+[ext_resource type="Script" path="res://addons/debug_draw_3d/examples_dd3d/demo_music_visualizer.gd" id="4_eq2lt"]
+[ext_resource type="Script" path="res://addons/debug_draw_3d/examples_dd3d/demo_settings_panel.gd" id="5_31v5h"]
+[ext_resource type="Script" path="res://addons/debug_draw_3d/examples_dd3d/demo_web_docs_version_select.gd" id="6_07f7q"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_87638"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -383,10 +383,10 @@ font_size = 80
 
 [node name="LinesAnim" type="AnimationPlayer" parent="."]
 root_node = NodePath("../LinePath")
-autoplay = "New Anim"
 libraries = {
 "": SubResource("AnimationLibrary_nj4nv")
 }
+autoplay = "New Anim"
 
 [node name="LinePath" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.0543, -8)
@@ -599,10 +599,10 @@ target_position = Vector3(0, -3.464, 0)
 
 [node name="RayEmitterAnimationPlayer" type="AnimationPlayer" parent="HitTest"]
 unique_name_in_owner = true
-autoplay = "New Anim"
 libraries = {
 "": SubResource("AnimationLibrary_vh8ml")
 }
+autoplay = "New Anim"
 
 [node name="Grids" type="Node3D" parent="."]
 transform = Transform3D(0.707106, 0, -0.707108, 0, 1, 0, 0.707108, 0, 0.707106, 0.730597, -2.5, 2.76274)
