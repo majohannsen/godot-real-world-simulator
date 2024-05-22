@@ -1,6 +1,6 @@
 extends Node
 
-var street_shape = preload("res://street_shape.tscn")
+var street_shape = preload("res://objects/street/street_shape.tscn")
 
 @onready var main = get_parent()
 

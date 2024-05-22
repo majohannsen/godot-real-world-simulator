@@ -1,10 +1,10 @@
 extends Node
 
-var house = preload("res://house.tscn")
+var streetLight = preload("res://objects/street_light/street_light.tscn")
 
 @onready var main = get_parent()
 
-var houses: Array[Vector2] = []
+var elements: Array[Vector2] = []
 
 func fetchCoordinates(chunk: Vector2):
 	var lat1 = main.lat_center - main.lat_span/2 + main.lat_span * chunk.x
@@ -15,7 +15,7 @@ func fetchCoordinates(chunk: Vector2):
 	var bbox = "[bbox:%s,%s,%s,%s]" % [lat1,lon1,lat2,lon2]
 	var out = '[out:json]'
 	var timeout = '[timeout:10]'
-	var query = bbox+out+timeout+';way[building];out center;'
+	var query = bbox+out+timeout+';node[highway=street_lamp];out center;'
 	print(baseUrl+query.uri_encode())
 	var request = HTTPRequest.new()
 	add_child(request)
@@ -29,14 +29,14 @@ func handleOverpassResponse(result, response_code, headers, body):
 		return
 	var buildings = json["elements"]
 	for building in buildings:
-		var lat = building["center"]["lat"]
-		var lon = building["center"]["lon"]
-		houses.append(main.latLonToCoordsInMeters(lat, lon))
-	for house in houses:
+		var lat = building["lat"]
+		var lon = building["lon"]
+		elements.append(main.latLonToCoordsInMeters(lat, lon))
+	for element in elements:
 		await get_tree().create_timer(0).timeout
-		await spawnHouse(house)
+		await spawnStreetLight(element)
 
-func spawnHouse(coords: Vector2):
-	var inst: StaticBody3D = house.instantiate()
+func spawnStreetLight(coords: Vector2):
+	var inst: StaticBody3D = streetLight.instantiate()
 	inst.transform.origin = Vector3(coords.x,0,coords.y)
 	add_child(inst)

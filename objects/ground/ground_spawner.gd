@@ -1,6 +1,6 @@
 extends Node
 
-var ground = preload("res://ground.tscn")
+var ground = preload("res://objects/ground/ground.tscn")
 
 @onready var main = get_parent()
 

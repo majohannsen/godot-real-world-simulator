@@ -11,7 +11,7 @@ const lon_center = 16.4136193
 
 var center = Vector2(latToMeter(lat_center), lonToMeter(lat_center, lon_center))
 
-var ground = preload("res://ground.tscn")
+var ground = preload("res://objects/ground/ground.tscn")
 
 @onready var groundSpawner = $GroundSpawner
 
