@@ -49,13 +49,18 @@ func handleOverpassResponse(result, response_code, headers, body):
 
 func spawnHouse(corners, height):
 	var mesh: CSGPolygon3D = CSGPolygon3D.new()
+	var collider: CollisionPolygon3D = CollisionPolygon3D.new()
 	mesh.mode = CSGPolygon3D.MODE_DEPTH
 	mesh.depth = height;
+	collider.depth = height
 	mesh.rotate_x(PI/2);
-	var meshCorners: PackedVector2Array = []
-	for corner in corners:
-		meshCorners.append(corner)
-	mesh.polygon = meshCorners
+	collider.rotate_x(PI/2);
+	mesh.polygon = corners
+	collider.polygon = corners
+	var pos = collider.transform.origin
+	pos.y = height/2;
+	collider.transform.origin = pos
 	var inst: StaticBody3D = StaticBody3D.new()
 	inst.add_child(mesh)
+	inst.add_child(collider)
 	add_child(inst)
