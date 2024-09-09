@@ -9,6 +9,9 @@ const lon_center = 16.4136193
 #const lat_center = 67.831433
 #const lon_center = 20.277365
 
+#const lat_center = 47.42332
+#const lon_center = 9.65680
+
 var center = Vector2(latToMeter(lat_center), lonToMeter(lat_center, lon_center))
 
 var ground = preload("res://objects/ground/ground.tscn")

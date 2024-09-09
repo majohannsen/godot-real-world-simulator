@@ -605,4 +605,3 @@ func _update_timers(delta : float):
 	timer_cubes -= delta
 	timer_3 -= delta
 	timer_text -= delta
-
