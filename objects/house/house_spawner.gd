@@ -42,6 +42,10 @@ func handleOverpassResponse(result, response_code, headers, body):
 				var h = building["tags"]["height"]
 				if h:
 					height = float(h)
+			elif building["tags"].has("building:levels"):
+				var h = building["tags"]["building:levels"]
+				if h:
+					height = int(h) * 6
 		heights.append(height)
 	for i in houses.size():
 		await get_tree().create_timer(0).timeout
