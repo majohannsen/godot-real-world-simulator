@@ -103,6 +103,10 @@ layout_mode = 2
 layout_mode = 2
 text = "Gasometer"
 
+[node name="Stefansplatz" type="Button" parent="PauseMenu/PanelContainer/MarginContainer/HBoxContainer/LocationsVBox"]
+layout_mode = 2
+text = "Stefansplatz"
+
 [node name="Lustenau" type="Button" parent="PauseMenu/PanelContainer/MarginContainer/HBoxContainer/LocationsVBox"]
 layout_mode = 2
 text = "Lustenau"

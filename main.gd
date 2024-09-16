@@ -6,11 +6,6 @@ const lon_span = chunk_size / 100000.0
 
 var lat_center = 48.18574
 var lon_center = 16.413616
-#const lat_center = 67.831433
-#const lon_center = 20.277365
-
-#const lat_center = 47.42380
-#const lon_center = 9.65680
 
 
 
