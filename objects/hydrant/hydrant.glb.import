@@ -17,6 +17,7 @@ nodes/root_type=""
 nodes/root_name=""
 nodes/apply_root_scale=true
 nodes/root_scale=1.0
+nodes/import_as_skeleton_bones=false
 meshes/ensure_tangents=true
 meshes/generate_lods=true
 meshes/create_shadow_meshes=true
@@ -28,7 +29,92 @@ animation/import=true
 animation/fps=30
 animation/trimming=false
 animation/remove_immutable_tracks=true
+animation/import_rest_as_RESET=false
 import_script/path=""
-_subresources={}
+_subresources={
+"nodes": {
+"PATH:group102476712": {
+"generate/physics": true
+},
+"PATH:group1063649019": {
+"generate/physics": true
+},
+"PATH:group1190348071": {
+"generate/physics": true
+},
+"PATH:group1243545241": {
+"generate/physics": true
+},
+"PATH:group1398094680": {
+"generate/physics": true
+},
+"PATH:group1638519671": {
+"generate/physics": true
+},
+"PATH:group165085386": {
+"generate/physics": true
+},
+"PATH:group1740983134": {
+"generate/physics": true
+},
+"PATH:group1883035771": {
+"generate/physics": true
+},
+"PATH:group1887225455": {
+"generate/physics": true
+},
+"PATH:group1943794709": {
+"generate/physics": true
+},
+"PATH:group2115470436": {
+"generate/physics": true
+},
+"PATH:group213327429": {
+"generate/physics": true
+},
+"PATH:group388367076": {
+"generate/physics": true
+},
+"PATH:group461815935": {
+"generate/physics": true
+},
+"PATH:group555150008": {
+"generate/physics": true
+},
+"PATH:group575483644": {
+"generate/physics": true
+},
+"PATH:group595254895": {
+"generate/physics": true
+},
+"PATH:group60278850": {
+"generate/physics": true
+},
+"PATH:group626582398": {
+"generate/physics": true
+},
+"PATH:group667683737": {
+"generate/physics": true
+},
+"PATH:group690755720": {
+"generate/physics": true
+},
+"PATH:group746141127": {
+"generate/physics": true
+},
+"PATH:group881577816": {
+"generate/physics": true
+},
+"PATH:group89111452": {
+"generate/physics": true
+},
+"PATH:group915003088": {
+"generate/physics": true
+},
+"PATH:group954259195": {
+"generate/physics": true
+}
+}
+}
 gltf/naming_version=1
 gltf/embedded_image_handling=1

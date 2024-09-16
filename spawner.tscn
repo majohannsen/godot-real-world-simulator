@@ -7,8 +7,8 @@
 [ext_resource type="Script" path="res://objects/street/street_spawner.gd" id="5_2ylbq"]
 [ext_resource type="Script" path="res://objects/house/house_spawner.gd" id="6_vub5m"]
 [ext_resource type="Script" path="res://objects/trash_basket/trash_basket_spawner.gd" id="7_rxlad"]
-[ext_resource type="Script" path="res://objects/street_light/hydrant_spawner.gd" id="8_003j0"]
-[ext_resource type="Script" path="res://objects/hydrant/street_light_spawner.gd" id="9_g33pg"]
+[ext_resource type="Script" path="res://objects/hydrant/hydrant_spawner.gd" id="8_003j0"]
+[ext_resource type="Script" path="res://objects/street_light/street_light_spawner.gd" id="9_g33pg"]
 
 [node name="Spawner" type="Node3D"]
 script = ExtResource("1_qccge")

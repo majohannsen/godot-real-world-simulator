@@ -37,6 +37,6 @@ func handleOverpassResponse(result, response_code, headers, body):
 		await spawnTree(element)
 
 func spawnTree(coords: Vector2):
-	var inst: StaticBody3D = tree.instantiate()
+	var inst = tree.instantiate()
 	inst.transform.origin = Vector3(coords.x,0,coords.y)
 	add_child(inst)

@@ -1,6 +1,6 @@
 extends Node
 
-var object = preload("res://objects/hydrant/hydrant.tscn")
+var streetLight = preload("res://objects/street_light/street_light.tscn")
 
 @onready var main = get_parent().get_parent()
 
@@ -15,7 +15,7 @@ func fetchCoordinates(chunk: Vector2):
 	var bbox = "[bbox:%s,%s,%s,%s]" % [lat1,lon1,lat2,lon2]
 	var out = '[out:json]'
 	var timeout = '[timeout:10]'
-	var query = bbox+out+timeout+';node[emergency=fire_hydrant];out center;'
+	var query = bbox+out+timeout+';node[highway=street_lamp];out center;'
 	print(baseUrl+query.uri_encode())
 	var request = HTTPRequest.new()
 	add_child(request)
@@ -34,9 +34,9 @@ func handleOverpassResponse(result, response_code, headers, body):
 		elements.append(main.latLonToCoordsInMeters(lat, lon))
 	for element in elements:
 		await get_tree().create_timer(0).timeout
-		await spawnHydrant(element)
+		await spawnStreetLight(element)
 
-func spawnHydrant(coords: Vector2):
-	var inst: StaticBody3D = object.instantiate()
+func spawnStreetLight(coords: Vector2):
+	var inst = streetLight.instantiate()
 	inst.transform.origin = Vector3(coords.x,0,coords.y)
 	add_child(inst)

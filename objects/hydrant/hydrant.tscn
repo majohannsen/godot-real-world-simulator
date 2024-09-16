@@ -1,29 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://c3nsjkvfbppwp"]
+[gd_scene load_steps=2 format=3 uid="uid://c3nsjkvfbppwp"]
 
 [ext_resource type="PackedScene" uid="uid://b2y15a7mj547m" path="res://objects/hydrant/hydrant.glb" id="1_yj1lc"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_0huye"]
-size = Vector3(10, 10, 10)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n1byv"]
-albedo_color = Color(1, 0.0980392, 0.27451, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_bcr1l"]
-material = SubResource("StandardMaterial3D_n1byv")
-size = Vector3(10, 10, 10)
-
-[node name="Hydrant" type="StaticBody3D"]
+[node name="Hydrant" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 5, 2.08165e-12)
-visible = false
-shape = SubResource("BoxShape3D_0huye")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 5, 2.08165e-12)
-visible = false
-mesh = SubResource("BoxMesh_bcr1l")
-
 [node name="hydrant" parent="." instance=ExtResource("1_yj1lc")]
-transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 1.13303, 0)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.459101, 0)

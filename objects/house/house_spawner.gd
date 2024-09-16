@@ -36,7 +36,7 @@ func handleOverpassResponse(result, response_code, headers, body):
 			var lon = corner["lon"]
 			cornersInMeters.append(main.latLonToCoordsInMeters(lat, lon))
 		houses.append(cornersInMeters)
-		var height = 10
+		var height = 6
 		if building.has("tags"):
 			if building["tags"].has("height"):
 				var h = building["tags"]["height"]

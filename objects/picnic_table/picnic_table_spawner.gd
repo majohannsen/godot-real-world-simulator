@@ -37,6 +37,6 @@ func handleOverpassResponse(result, response_code, headers, body):
 		await spawnPicnicTable(element)
 
 func spawnPicnicTable(coords: Vector2):
-	var inst: StaticBody3D = object.instantiate()
+	var inst = object.instantiate()
 	inst.transform.origin = Vector3(coords.x,0,coords.y)
 	add_child(inst)
