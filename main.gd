@@ -4,13 +4,13 @@ const earthCircumference = 40075000
 const chunk_size = 1000
 const lat_span = chunk_size / 100000.0
 const lon_span = chunk_size / 100000.0
-#const lat_center = 48.185717
-#const lon_center = 16.4136193
+const lat_center = 48.185717
+const lon_center = 16.4136193
 #const lat_center = 67.831433
 #const lon_center = 20.277365
 
-const lat_center = 47.42380
-const lon_center = 9.65680
+#const lat_center = 47.42380
+#const lon_center = 9.65680
 
 var center = Vector2(latToMeter(lat_center), lonToMeter(lat_center, lon_center))
 

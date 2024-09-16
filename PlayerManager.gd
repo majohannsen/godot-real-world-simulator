@@ -3,7 +3,9 @@ extends Node
 @onready var player = $Player
 @onready var main = get_parent()
 
-var car = preload("res://cars/Models/offroad_car/offroad_car.tscn")
+var carPrefab = preload("res://cars/Models/offroad_car/offroad_car.tscn")
+
+var car
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -18,10 +20,12 @@ func _process(delta: float) -> void:
 
 
 func getPlayerPosition():
-	return player.transform.origin
-
+	if car:
+		return car.transform.origin
+	else:
+		return player.transform.origin
 
 func switchToCar():
-	var inst = car.instantiate()
-	inst.transform.origin = Vector3(0,10,0)
-	add_child(inst)
+	car = carPrefab.instantiate()
+	car.transform.origin = Vector3(0,10,0)
+	add_child(car)
