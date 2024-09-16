@@ -1,126 +1,44 @@
-[gd_scene load_steps=9 format=3 uid="uid://ong4vy8hl0oj"]
+[gd_scene load_steps=10 format=3 uid="uid://ong4vy8hl0oj"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_ag4ow"]
 [ext_resource type="Script" path="res://PlayerManager.gd" id="3_86kqk"]
-[ext_resource type="Script" path="res://PauseMenuManager.gd" id="3_gadc5"]
 [ext_resource type="PackedScene" uid="uid://bapisy87owa8v" path="res://spawner.tscn" id="3_gujul"]
-[ext_resource type="Script" path="res://HudManager.gd" id="6_34pd8"]
+[ext_resource type="PackedScene" uid="uid://dfy8ufcuf8i0y" path="res://ui/hud.tscn" id="4_ddviv"]
+[ext_resource type="PackedScene" uid="uid://7if28dqjlfui" path="res://ui/pause_menu.tscn" id="5_61y7o"]
 [ext_resource type="Script" path="res://calculator.gd" id="7_g52vg"]
 
-[sub_resource type="Environment" id="Environment_n7bqa"]
-background_mode = 1
-background_color = Color(0.4, 0.858824, 1, 1)
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_g2g6w"]
+sky_top_color = Color(0.403922, 0.67451, 0.847059, 1)
+sky_horizon_color = Color(0.744118, 0.806863, 0.782353, 1)
+ground_bottom_color = Color(0.572549, 0.552941, 0.282353, 1)
+ground_horizon_color = Color(0.744118, 0.806863, 0.782353, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o6jgo"]
-bg_color = Color(0.497788, 0.66368, 0.25706, 1)
+[sub_resource type="Sky" id="Sky_0wkt1"]
+sky_material = SubResource("ProceduralSkyMaterial_g2g6w")
+
+[sub_resource type="Environment" id="Environment_6rave"]
+background_mode = 2
+sky = SubResource("Sky_0wkt1")
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_ag4ow")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.530229, -0.783182, 0.324783, 0.641563, 0.621052, 0.450213, -0.554305, -0.0303469, 0.83176, 0, 0, 0)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_n7bqa")
+environment = SubResource("Environment_6rave")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+light_color = Color(0.913725, 0.788235, 0.670588, 1)
+shadow_enabled = true
 
 [node name="Spawner" parent="." instance=ExtResource("3_gujul")]
 
 [node name="PlayerManager" type="Node" parent="."]
 script = ExtResource("3_86kqk")
 
-[node name="HUD" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("6_34pd8")
+[node name="HUD" parent="." instance=ExtResource("4_ddviv")]
 
-[node name="MarginContainer" type="MarginContainer" parent="HUD"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-theme_override_constants/margin_left = 30
-theme_override_constants/margin_top = 30
-theme_override_constants/margin_right = 30
-theme_override_constants/margin_bottom = 30
-
-[node name="VBoxContainer" type="VBoxContainer" parent="HUD/MarginContainer"]
-layout_mode = 2
-
-[node name="LonLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "lon:"
-
-[node name="LatLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "lat:"
-
-[node name="PauseMenu" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("3_gadc5")
-
-[node name="PanelContainer" type="PanelContainer" parent="PauseMenu"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_o6jgo")
-
-[node name="MarginContainer" type="MarginContainer" parent="PauseMenu/PanelContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 40
-theme_override_constants/margin_top = 40
-theme_override_constants/margin_right = 40
-theme_override_constants/margin_bottom = 40
-
-[node name="Label" type="Label" parent="PauseMenu/PanelContainer/MarginContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 0
-theme_override_font_sizes/font_size = 50
-text = "Pause"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="PauseMenu/PanelContainer/MarginContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="LocationsVBox" type="VBoxContainer" parent="PauseMenu/PanelContainer/MarginContainer/HBoxContainer"]
-layout_mode = 2
-
-[node name="Gasometer" type="Button" parent="PauseMenu/PanelContainer/MarginContainer/HBoxContainer/LocationsVBox"]
-layout_mode = 2
-text = "Gasometer"
-
-[node name="Stefansplatz" type="Button" parent="PauseMenu/PanelContainer/MarginContainer/HBoxContainer/LocationsVBox"]
-layout_mode = 2
-text = "Stefansplatz"
-
-[node name="Lustenau" type="Button" parent="PauseMenu/PanelContainer/MarginContainer/HBoxContainer/LocationsVBox"]
-layout_mode = 2
-text = "Lustenau"
-
-[node name="PlayersVbox" type="VBoxContainer" parent="PauseMenu/PanelContainer/MarginContainer/HBoxContainer"]
-layout_mode = 2
-
-[node name="CarButton" type="Button" parent="PauseMenu/PanelContainer/MarginContainer/HBoxContainer/PlayersVbox"]
-layout_mode = 2
-text = "Car"
-
-[node name="FlyAroundButton" type="Button" parent="PauseMenu/PanelContainer/MarginContainer/HBoxContainer/PlayersVbox"]
-layout_mode = 2
-text = "Fly Around"
+[node name="PauseMenu" parent="." instance=ExtResource("5_61y7o")]
 
 [node name="Calculator" type="Node" parent="."]
 script = ExtResource("7_g52vg")
