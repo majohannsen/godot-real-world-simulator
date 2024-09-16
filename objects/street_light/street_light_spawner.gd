@@ -16,7 +16,6 @@ func fetchCoordinates(chunk: Vector2):
 	var out = '[out:json]'
 	var timeout = '[timeout:10]'
 	var query = bbox+out+timeout+';node[highway=street_lamp];out center;'
-	print(baseUrl+query.uri_encode())
 	var request = HTTPRequest.new()
 	add_child(request)
 	request.request_completed.connect(handleOverpassResponse)
@@ -28,6 +27,7 @@ func handleOverpassResponse(result, response_code, headers, body):
 		print("Response is empty")
 		return
 	var buildings = json["elements"]
+	elements = []
 	for building in buildings:
 		var lat = building["lat"]
 		var lon = building["lon"]
@@ -40,3 +40,9 @@ func spawnStreetLight(coords: Vector2):
 	var inst = streetLight.instantiate()
 	inst.transform.origin = Vector3(coords.x,0,coords.y)
 	add_child(inst)
+
+
+func flush_all_instances():
+	for child in get_children():
+		child.queue_free()
+	elements = []

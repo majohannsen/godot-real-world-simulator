@@ -16,7 +16,6 @@ func fetchCoordinates(chunk: Vector2):
 	var out = '[out:json]'
 	var timeout = '[timeout:10]'
 	var query = bbox+out+timeout+';node[natural=tree];out center;'
-	print(baseUrl+query.uri_encode())
 	var request = HTTPRequest.new()
 	add_child(request)
 	request.request_completed.connect(handleOverpassResponse)
@@ -40,3 +39,8 @@ func spawnTree(coords: Vector2):
 	var inst = tree.instantiate()
 	inst.transform.origin = Vector3(coords.x,0,coords.y)
 	add_child(inst)
+
+func flush_all_instances():
+	for child in get_children():
+		child.queue_free()
+	elements = []

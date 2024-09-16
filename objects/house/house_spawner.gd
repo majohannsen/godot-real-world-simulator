@@ -14,7 +14,6 @@ func fetchCoordinates(chunk: Vector2):
 	var out = '[out:json]'
 	var timeout = '[timeout:10]'
 	var query = bbox+out+timeout+';way[building];out geom;'
-	print(baseUrl+query.uri_encode())
 	var request = HTTPRequest.new()
 	add_child(request)
 	request.request_completed.connect(handleOverpassResponse)
@@ -68,3 +67,7 @@ func spawnHouse(corners, height):
 	inst.add_child(mesh)
 	inst.add_child(collider)
 	add_child(inst)
+
+func flush_all_instances():
+	for child in get_children():
+		child.queue_free()

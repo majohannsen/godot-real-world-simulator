@@ -11,3 +11,8 @@ func spawnGround(chunk: Vector2):
 	var inst: StaticBody3D = ground.instantiate()
 	inst.transform.origin = Vector3(coords.x,0,coords.y)
 	add_child(inst)
+	print("spawned ground")
+
+func flush_all_instances():
+	for child in get_children():
+		child.queue_free()

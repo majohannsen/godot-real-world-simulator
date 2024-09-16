@@ -4,7 +4,7 @@ var street_shape = preload("res://objects/street/street_shape.tscn")
 
 @onready var main = get_parent().get_parent()
 
-var streets: Array = []
+
 
 func fetchCoordinates(chunk: Vector2):
 	var lat1 = main.lat_center - main.lat_span/2 + main.lat_span * chunk.x
@@ -16,7 +16,6 @@ func fetchCoordinates(chunk: Vector2):
 	var out = '[out:json]'
 	var timeout = '[timeout:10]'
 	var query = bbox+out+timeout+';way[highway];out geom;'
-	print(baseUrl+query.uri_encode())
 	var request = HTTPRequest.new()
 	add_child(request)
 	request.request_completed.connect(handleOverpassResponse)
@@ -28,6 +27,7 @@ func handleOverpassResponse(result, response_code, headers, body):
 		print("Response is empty")
 		return
 	var fetchedStreets = json["elements"]
+	var streets: Array = []
 	for street in fetchedStreets:
 		var points: Array[Vector2] = []
 		for point in street["geometry"]:
@@ -46,3 +46,7 @@ func spawnStreet(street: Array[Vector2]):
 		path.curve.add_point(Vector3(point.x,0.1,point.y))
 	path.add_child(street_shape.instantiate())
 	add_child(path)
+
+func flush_all_instances():
+	for child in get_children():
+		child.queue_free()
