@@ -2,7 +2,7 @@ extends Node
 
 var streetLight = preload("res://objects/street_light/street_light.tscn")
 
-@onready var main = get_parent()
+@onready var main = get_parent().get_parent()
 
 var elements: Array[Vector2] = []
 

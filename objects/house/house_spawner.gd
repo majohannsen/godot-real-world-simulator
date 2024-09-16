@@ -2,7 +2,7 @@ extends Node
 
 var house = preload("res://objects/house/house.tscn")
 
-@onready var main = get_parent()
+@onready var main = get_parent().get_parent()
 
 func fetchCoordinates(chunk: Vector2):
 	var lat1 = main.lat_center - main.lat_span/2 + main.lat_span * chunk.x
@@ -45,7 +45,7 @@ func handleOverpassResponse(result, response_code, headers, body):
 			elif building["tags"].has("building:levels"):
 				var h = building["tags"]["building:levels"]
 				if h:
-					height = int(h) * 6
+					height = int(h) * 3
 		heights.append(height)
 	for i in houses.size():
 		await get_tree().create_timer(0).timeout

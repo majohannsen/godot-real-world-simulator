@@ -1,0 +1,158 @@
+[gd_scene load_steps=6 format=3 uid="uid://c1f3hqr0k3uov"]
+
+[ext_resource type="PackedScene" uid="uid://benmjny2guowm" path="res://cars/Models/car/Wheel.glb" id="1_b1bel"]
+[ext_resource type="PackedScene" uid="uid://8sl5gmdd6o6w" path="res://cars/camera/camera_3d.tscn" id="2_4gss0"]
+[ext_resource type="ArrayMesh" uid="uid://c3ed02n8ukff6" path="res://cars/Models/car/car_model.obj" id="3_3veu2"]
+
+[sub_resource type="GDScript" id="GDScript_wjhoy"]
+script/source = "extends VehicleBody3D
+
+
+@export var STEER_SPEED = 1.5
+@export var STEER_LIMIT = 0.6
+var steer_target = 0
+@export var engine_force_value = 40
+
+func _physics_process(delta):
+	var speed = linear_velocity.length()*Engine.get_frames_per_second()*delta
+	traction(speed)
+	
+	var fwd_mps = transform.basis.x.x
+	steer_target = Input.get_action_strength(\"ui_left\") - Input.get_action_strength(\"ui_right\")
+	steer_target *= STEER_LIMIT
+	
+	if Input.is_action_pressed(\"ui_down\"):
+	# Increase engine force at low speeds to make the initial acceleration faster.
+
+		if speed < 20 and speed != 0:
+			engine_force = clamp(engine_force_value * 3 / speed, 0, 300)
+		else:
+			engine_force = engine_force_value
+	else:
+		engine_force = 0
+	if Input.is_action_pressed(\"ui_up\"):
+		# Increase engine force at low speeds to make the initial acceleration faster.
+		if fwd_mps >= -1:
+			if speed < 30 and speed != 0:
+				engine_force = -clamp(engine_force_value * 10 / speed, 0, 300)
+			else:
+				engine_force = -engine_force_value
+		else:
+			brake = 1
+	else:
+		brake = 0.0
+	
+	if Input.is_action_pressed(\"ui_select\"):
+		brake=3
+		$wheal2.wheel_friction_slip=0.8
+		$wheal3.wheel_friction_slip=0.8
+	else:
+		$wheal2.wheel_friction_slip=3
+		$wheal3.wheel_friction_slip=3
+
+	steering = move_toward(steering, steer_target, STEER_SPEED * delta)
+
+func traction(speed):
+	apply_central_force(Vector3.DOWN*speed * 2)
+"
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_iavao"]
+points = PackedVector3Array(1.10136, -0.628675, 0.188127, 1.06319, -0.608301, -0.822965, 1.06038, -0.390538, -0.949564, 1.10114, -0.468621, 0.212767, 1.09812, -0.672134, 0.898441, 1.06621, -1.02251, 0.848311, 1.00345, -1.02051, -1.76439, 1.00194, -0.962445, -2.11147, 1.00561, -0.86434, -2.12209, 0.990728, -0.53481, -2.04137, 0.926678, -0.289252, -1.44704, 0.947596, -0.208342, -0.828063, 0.979298, -0.195858, 0.120579, 0.931853, -0.151693, 2.02891, 1.00863, -0.388418, 2.02976, 1.09748, -0.548825, 0.941349, 1.07009, -0.602294, 1.49023, 1.05866, -0.706524, 1.53313, 1.00863, -0.753515, 2.03103, 0.977573, -0.979876, 1.91421, 0.680397, -1.02581, 0.863605, 1.00863, -1.02581, -1.05322, 0.732586, -1.02746, -1.76566, 0.732586, -1.02263, -2.16075, 0.712962, -0.908152, -2.1701, 0.711021, -0.763997, -2.16542, 0.708864, -0.592637, -2.15948, 0.986846, -0.712883, -2.10977, 0.980376, -0.525624, -2.04137, 0.909209, -0.3777, -1.79752, 0.750917, -0.285484, -1.7784, 0.687514, 0.15652, -0.0948088, 0.679535, 0.167473, 0.227636, 0.673496, 0.175717, 0.468939, -0.932069, -0.151693, 2.02891, 0.873626, -0.468386, 2.16486, 1.00863, -0.58663, 2.03061, 1.03364, -0.630442, 1.89297, 0.873626, -0.617487, 2.16486, 0.844944, -0.749982, 2.16783, 0.879233, -0.889426, 2.04548, -0.00021553, -0.915336, 2.03188, -0.977788, -0.979876, 1.91421, -0.680613, -1.02581, 0.863605, -0.732802, -1.02746, -1.76566, -0.732802, -1.02263, -2.16075, -0.713177, -0.908152, -2.1701, -0.711236, -0.763997, -2.16542, -0.70908, -0.592637, -2.15948, -0.00021553, -0.447775, -2.13993, 0.747467, -0.46179, -2.07833, -0.00021553, -0.235665, -1.78945, -0.68773, 0.15652, -0.0948088, -0.673712, 0.175717, 0.468939, -1.00884, -0.388418, 2.02976, -0.873841, -0.468386, 2.16486, -0.979513, -0.195858, 0.120579, -1.10136, -0.468621, 0.212767, 0.851198, -0.674725, 2.16953, -0.845159, -0.749982, 2.16783, -0.879448, -0.889426, 2.04548, -1.00884, -0.753515, 2.03103, -1.06642, -1.02251, 0.848311, -1.00884, -1.02581, -1.05322, -1.00367, -1.02051, -1.76439, -1.00216, -0.962445, -2.11147, -1.00582, -0.86434, -2.12209, -0.987061, -0.712883, -2.10977, -0.990943, -0.53481, -2.04137, -0.980592, -0.525624, -2.04137, -0.747682, -0.46179, -2.07833, -0.751133, -0.285484, -1.7784, -0.67975, 0.167473, 0.227636, -0.926893, -0.289252, -1.44704, -0.947812, -0.208342, -0.828063, -1.0703, -0.602294, 1.49023, -1.03386, -0.630442, 1.89297, -1.00884, -0.58663, 2.03061, -1.09769, -0.548825, 0.941349, -0.851413, -0.674725, 2.16953, -0.873841, -0.617487, 2.16486, -1.0606, -0.390538, -0.949564, -1.10158, -0.628675, 0.188127, -1.09834, -0.672134, 0.898441, -1.05887, -0.706524, 1.53313, -1.0634, -0.608301, -0.822965, -0.909425, -0.3777, -1.79752)
+
+[node name="Car" type="Node3D"]
+
+[node name="Car" type="VehicleBody3D" parent="."]
+center_of_mass_mode = 1
+center_of_mass = Vector3(0, -0.1, 0)
+script = SubResource("GDScript_wjhoy")
+STEER_LIMIT = 0.4
+engine_force_value = 160
+
+[node name="wheal0" type="VehicleWheel3D" parent="Car"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.997421, 0.373828, -1.41499)
+use_as_traction = true
+use_as_steering = true
+wheel_roll_influence = 0.5
+wheel_radius = 0.37
+wheel_rest_length = 0.095
+wheel_friction_slip = 3.0
+suspension_travel = 0.357
+suspension_stiffness = 30.0
+suspension_max_force = 10000.0
+
+[node name="Wheel" parent="Car/wheal0" instance=ExtResource("1_b1bel")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.142656, 0, 0)
+
+[node name="wheal1" type="VehicleWheel3D" parent="Car"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.02668, 0.373828, -1.41499)
+use_as_traction = true
+use_as_steering = true
+wheel_roll_influence = 0.5
+wheel_radius = 0.37
+wheel_rest_length = 0.095
+wheel_friction_slip = 3.0
+suspension_travel = 0.357
+suspension_stiffness = 30.0
+suspension_max_force = 10000.0
+
+[node name="Wheel" parent="Car/wheal1" instance=ExtResource("1_b1bel")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0775136, 0, 0)
+
+[node name="wheal2" type="VehicleWheel3D" parent="Car"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.997421, 0.371844, 1.21283)
+use_as_traction = true
+wheel_roll_influence = 0.5
+wheel_radius = 0.37
+wheel_rest_length = 0.095
+wheel_friction_slip = 3.0
+suspension_travel = 0.357
+suspension_stiffness = 30.0
+suspension_max_force = 10000.0
+
+[node name="Wheel" parent="Car/wheal2" instance=ExtResource("1_b1bel")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.142656, 0, 0)
+
+[node name="wheal3" type="VehicleWheel3D" parent="Car"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.02668, 0.371844, 1.21283)
+use_as_traction = true
+wheel_roll_influence = 0.5
+wheel_radius = 0.37
+wheel_rest_length = 0.095
+wheel_friction_slip = 3.0
+suspension_travel = 0.357
+suspension_stiffness = 30.0
+suspension_max_force = 10000.0
+
+[node name="Wheel" parent="Car/wheal3" instance=ExtResource("1_b1bel")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0775136, 0, 0)
+
+[node name="look" type="Node3D" parent="Car"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2149, 0)
+
+[node name="Camera3D" parent="Car/look" instance=ExtResource("2_4gss0")]
+transform = Transform3D(1, 0, 0, 0, 0.974347, 0.225053, 0, -0.225053, 0.974347, 0, 1.97324, 6.19962)
+
+[node name="Hud" type="CanvasLayer" parent="Car"]
+layer = 2
+
+[node name="speed" type="Label" parent="Car/Hud"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -23.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 50
+metadata/_edit_use_anchors_ = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Car"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.26233, 0)
+mesh = ExtResource("3_3veu2")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Car"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.26233, 0)
+shape = SubResource("ConvexPolygonShape3D_iavao")

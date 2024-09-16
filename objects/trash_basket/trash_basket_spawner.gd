@@ -2,7 +2,7 @@ extends Node
 
 var object = preload("res://objects/trash_basket/trash_basket.tscn")
 
-@onready var main = get_parent()
+@onready var main = get_parent().get_parent()
 
 var elements: Array[Vector2] = []
 

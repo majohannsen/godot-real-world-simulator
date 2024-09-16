@@ -1,19 +1,17 @@
-[gd_scene load_steps=12 format=3 uid="uid://ong4vy8hl0oj"]
+[gd_scene load_steps=8 format=3 uid="uid://ong4vy8hl0oj"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_ag4ow"]
-[ext_resource type="Script" path="res://objects/house/house_spawner.gd" id="1_p5w3m"]
-[ext_resource type="Script" path="res://objects/street/street_spawner.gd" id="3_6dvfo"]
+[ext_resource type="Script" path="res://PlayerManager.gd" id="3_86kqk"]
+[ext_resource type="Script" path="res://PauseMenuManager.gd" id="3_gadc5"]
+[ext_resource type="PackedScene" uid="uid://bapisy87owa8v" path="res://spawner.tscn" id="3_gujul"]
 [ext_resource type="PackedScene" uid="uid://dgpjxoygnvyy4" path="res://assets/simple_fpsplayer/Player.tscn" id="4_0w385"]
-[ext_resource type="Script" path="res://objects/ground/ground_spawner.gd" id="5_k1k1w"]
-[ext_resource type="Script" path="res://objects/hydrant/street_light_spawner.gd" id="6_yn5pq"]
-[ext_resource type="Script" path="res://objects/tree/tree_spawner.gd" id="7_1wcdc"]
-[ext_resource type="Script" path="res://objects/trash_basket/trash_basket_spawner.gd" id="8_lhwwb"]
-[ext_resource type="Script" path="res://objects/street_light/hydrant_spawner.gd" id="9_4vret"]
-[ext_resource type="Script" path="res://objects/picnic_table/picnic_table_spawner.gd" id="10_pvfmv"]
 
 [sub_resource type="Environment" id="Environment_n7bqa"]
 background_mode = 1
 background_color = Color(0.4, 0.858824, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o6jgo"]
+bg_color = Color(0.497788, 0.66368, 0.25706, 1)
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_ag4ow")
@@ -21,34 +19,56 @@ script = ExtResource("1_ag4ow")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.530229, -0.783182, 0.324783, 0.641563, 0.621052, 0.450213, -0.554305, -0.0303469, 0.83176, 0, 0, 0)
 
-[node name="HouseSpawner" type="Node3D" parent="."]
-script = ExtResource("1_p5w3m")
-
-[node name="StreetSpawner" type="Node3D" parent="."]
-script = ExtResource("3_6dvfo")
-
-[node name="Player" parent="." instance=ExtResource("4_0w385")]
-transform = Transform3D(-4.37114e-08, -3.48787e-16, -1, 3.48787e-16, 1, -3.48787e-16, 1, -3.48787e-16, -4.37114e-08, 0, 0, 0)
-
-[node name="GroundSpawner" type="Node3D" parent="."]
-script = ExtResource("5_k1k1w")
-
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-
-[node name="StreetLightSpawner" type="Node3D" parent="."]
-script = ExtResource("6_yn5pq")
-
-[node name="TreeSpawner" type="Node3D" parent="."]
-script = ExtResource("7_1wcdc")
-
-[node name="TrashBasketSpawner" type="Node3D" parent="."]
-script = ExtResource("8_lhwwb")
-
-[node name="HydrantSpawner" type="Node3D" parent="."]
-script = ExtResource("9_4vret")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_n7bqa")
 
-[node name="PicnicTableSpawner" type="Node3D" parent="."]
-script = ExtResource("10_pvfmv")
+[node name="Spawner" parent="." instance=ExtResource("3_gujul")]
+
+[node name="PauseMenu" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_gadc5")
+
+[node name="PanelContainer" type="PanelContainer" parent="PauseMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_o6jgo")
+
+[node name="MarginContainer" type="MarginContainer" parent="PauseMenu/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 40
+
+[node name="Label" type="Label" parent="PauseMenu/PanelContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 50
+text = "Pause"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PauseMenu/PanelContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="CarButton" type="Button" parent="PauseMenu/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Car"
+
+[node name="PlayerManager" type="Node" parent="."]
+script = ExtResource("3_86kqk")
+
+[node name="Player" parent="PlayerManager" instance=ExtResource("4_0w385")]
+transform = Transform3D(-4.37114e-08, -3.48787e-16, -1, 3.48787e-16, 1, -3.48787e-16, 1, -3.48787e-16, -4.37114e-08, 0, 0, 0)

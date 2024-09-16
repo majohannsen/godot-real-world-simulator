@@ -1,0 +1,38 @@
+[gd_scene load_steps=10 format=3 uid="uid://bapisy87owa8v"]
+
+[ext_resource type="Script" path="res://SpawnManager.gd" id="1_qccge"]
+[ext_resource type="Script" path="res://objects/tree/tree_spawner.gd" id="2_6x53q"]
+[ext_resource type="Script" path="res://objects/picnic_table/picnic_table_spawner.gd" id="3_5dar5"]
+[ext_resource type="Script" path="res://objects/ground/ground_spawner.gd" id="4_sqli3"]
+[ext_resource type="Script" path="res://objects/street/street_spawner.gd" id="5_2ylbq"]
+[ext_resource type="Script" path="res://objects/house/house_spawner.gd" id="6_vub5m"]
+[ext_resource type="Script" path="res://objects/trash_basket/trash_basket_spawner.gd" id="7_rxlad"]
+[ext_resource type="Script" path="res://objects/street_light/hydrant_spawner.gd" id="8_003j0"]
+[ext_resource type="Script" path="res://objects/hydrant/street_light_spawner.gd" id="9_g33pg"]
+
+[node name="Spawner" type="Node3D"]
+script = ExtResource("1_qccge")
+
+[node name="TreeSpawner" type="Node3D" parent="."]
+script = ExtResource("2_6x53q")
+
+[node name="PicnicTableSpawner" type="Node3D" parent="."]
+script = ExtResource("3_5dar5")
+
+[node name="GroundSpawner" type="Node3D" parent="."]
+script = ExtResource("4_sqli3")
+
+[node name="StreetSpawner" type="Node3D" parent="."]
+script = ExtResource("5_2ylbq")
+
+[node name="HouseSpawner" type="Node3D" parent="."]
+script = ExtResource("6_vub5m")
+
+[node name="TrashBasketSpawner" type="Node3D" parent="."]
+script = ExtResource("7_rxlad")
+
+[node name="HydrantSpawner" type="Node3D" parent="."]
+script = ExtResource("8_003j0")
+
+[node name="StreetLightSpawner" type="Node3D" parent="."]
+script = ExtResource("9_g33pg")

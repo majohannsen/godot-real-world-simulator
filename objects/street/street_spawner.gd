@@ -2,7 +2,7 @@ extends Node
 
 var street_shape = preload("res://objects/street/street_shape.tscn")
 
-@onready var main = get_parent()
+@onready var main = get_parent().get_parent()
 
 var streets: Array = []
 

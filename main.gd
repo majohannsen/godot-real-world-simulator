@@ -4,19 +4,19 @@ const earthCircumference = 40075000
 const chunk_size = 1000
 const lat_span = chunk_size / 100000.0
 const lon_span = chunk_size / 100000.0
-const lat_center = 48.185717
-const lon_center = 16.4136193
+#const lat_center = 48.185717
+#const lon_center = 16.4136193
 #const lat_center = 67.831433
 #const lon_center = 20.277365
 
-#const lat_center = 47.42332
-#const lon_center = 9.65680
+const lat_center = 47.42380
+const lon_center = 9.65680
 
 var center = Vector2(latToMeter(lat_center), lonToMeter(lat_center, lon_center))
 
-var ground = preload("res://objects/ground/ground.tscn")
-
-@onready var groundSpawner = $GroundSpawner
+@onready var spawner = $Spawner
+@onready var pauseMenu = $PauseMenu
+@onready var playerManager = $PlayerManager
 
 var loadedChunks: Dictionary = {}
 
@@ -54,24 +54,14 @@ func lonToMeter(lat, lon):
 	var lonInRad = lon*PI/180
 	return floor((1/(2*PI))*(earthCircumference/2)*(lonInRad))
 
-func setPlayerPosition():
-	$Player.position.x = 0
-	$Player.position.y = 50
-	$Player.position.z = 0
 
 func spawnChunk(chunk: Vector2):
-	$GroundSpawner.spawnGround(chunk)
-	$StreetSpawner.fetchCoordinates(chunk)
-	$HouseSpawner.fetchCoordinates(chunk)
-	$StreetLightSpawner.fetchCoordinates(chunk)
-	$TreeSpawner.fetchCoordinates(chunk)
-	$TrashBasketSpawner.fetchCoordinates(chunk)
-	$HydrantSpawner.fetchCoordinates(chunk)
-	$PicnicTableSpawner.fetchCoordinates(chunk)
+	spawner.spawn_chunk(chunk)
+	
 
 func getCurrentChunk():
 	var currentChunk = Vector2()
-	var gamecoords = $Player.transform.origin
+	var gamecoords = playerManager.getPlayerPosition()
 	var coords = latLonToCoordsInMeters(lat_center, lon_center) + Vector2(gamecoords.x, gamecoords.z)
 	currentChunk.x = round(coords.x/getChunkWidth()) 
 	currentChunk.y = round(coords.y/getChunkHeight()) 
@@ -79,11 +69,19 @@ func getCurrentChunk():
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	setPlayerPosition()
+	pauseMenu.hide()
 	DebugDraw3D.scoped_config().set_thickness(1)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	if Input.is_action_just_pressed("ui_cancel"):
+		if pauseMenu.visible:
+			pauseMenu.hide()
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		else:
+			pauseMenu.show()
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	
 	if !loadedChunks.has(getCurrentChunk()):
 		loadedChunks[getCurrentChunk()] = true
 		spawnChunk(getCurrentChunk())

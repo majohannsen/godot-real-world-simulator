@@ -1,0 +1,100 @@
+[gd_scene load_steps=6 format=3 uid="uid://cbeb5yt2bnt4h"]
+
+[ext_resource type="Script" path="res://cars/Models/offroad_car/car_ghost.gd" id="1_34215"]
+[ext_resource type="PackedScene" uid="uid://fdliqqju58ig" path="res://cars/Models/offroad_car/offroad_car.glb" id="2_p3q8j"]
+[ext_resource type="PackedScene" uid="uid://2tgab7dl8uy3" path="res://cars/Models/offroad_car/offroad_car_tyre.glb" id="3_4dnts"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1qp4l"]
+size = Vector3(0.85, 1.2262, 1.94971)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_u8ks3"]
+size = Vector3(0.85, 0.401425, 0.648633)
+
+[node name="Ghost" type="VehicleBody3D"]
+center_of_mass_mode = 1
+center_of_mass = Vector3(0, -0.3, 0)
+script = ExtResource("1_34215")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.13421, 0.474854)
+shape = SubResource("BoxShape3D_1qp4l")
+disabled = true
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
+transform = Transform3D(-1.6, 0, -1.39876e-07, 0, 1.6, 0, 1.39876e-07, 0, -1.6, 4.16291e-08, 0.838194, -1.05226)
+shape = SubResource("BoxShape3D_u8ks3")
+disabled = true
+
+[node name="offroad_car" parent="." instance=ExtResource("2_p3q8j")]
+transform = Transform3D(-1.6, 0, -1.39876e-07, 0, 1.6, 0, 1.39876e-07, 0, -1.6, 0, 0, 0)
+
+[node name="wheal0" type="VehicleWheel3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.913732, 0.230445, -1.05254)
+use_as_traction = true
+use_as_steering = true
+wheel_roll_influence = 0.5
+wheel_radius = 0.39
+wheel_rest_length = 0.095
+wheel_friction_slip = 1.8
+suspension_stiffness = 40.0
+suspension_max_force = 10000.0
+
+[node name="offroad_car_tyre" parent="wheal0" instance=ExtResource("3_4dnts")]
+transform = Transform3D(0.03, 0, 0, 0, 0.03, 0, 0, 0, 0.03, -0.0275928, -0.113369, 0.12217)
+
+[node name="wheal1" type="VehicleWheel3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.944641, 0.23, -1.053)
+use_as_traction = true
+use_as_steering = true
+wheel_roll_influence = 0.5
+wheel_radius = 0.39
+wheel_rest_length = 0.095
+wheel_friction_slip = 1.8
+suspension_stiffness = 40.0
+suspension_max_force = 10000.0
+
+[node name="offroad_car_tyre" parent="wheal1" instance=ExtResource("3_4dnts")]
+transform = Transform3D(-0.03, 0, -2.62268e-09, 0, 0.03, 0, 2.62268e-09, 0, -0.03, 0.0262408, -0.113, -0.122)
+
+[node name="wheal2" type="VehicleWheel3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.913732, 0.23, 0.869543)
+use_as_traction = true
+wheel_roll_influence = 0.5
+wheel_radius = 0.39
+wheel_rest_length = 0.095
+wheel_friction_slip = 3.0
+suspension_stiffness = 40.0
+suspension_max_force = 10000.0
+
+[node name="offroad_car_tyre" parent="wheal2" instance=ExtResource("3_4dnts")]
+transform = Transform3D(0.03, 0, 0, 0, 0.03, 0, 0, 0, 0.03, -0.0311506, -0.113, 0.123085)
+
+[node name="wheal3" type="VehicleWheel3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.944641, 0.23, 0.87)
+use_as_traction = true
+wheel_roll_influence = 0.5
+wheel_radius = 0.39
+wheel_rest_length = 0.095
+wheel_friction_slip = 3.0
+suspension_stiffness = 40.0
+suspension_max_force = 10000.0
+
+[node name="offroad_car_tyre" parent="wheal3" instance=ExtResource("3_4dnts")]
+transform = Transform3D(-0.03, 0, -2.62268e-09, 0, 0.03, 0, 2.62268e-09, 0, -0.03, 0.0191985, -0.113, -0.123)
+
+[node name="Hud" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="speed" type="Label" parent="Hud"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -23.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 50
+metadata/_edit_use_anchors_ = true

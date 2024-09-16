@@ -2,7 +2,7 @@ extends Node
 
 var ground = preload("res://objects/ground/ground.tscn")
 
-@onready var main = get_parent()
+@onready var main = get_parent().get_parent()
 
 func spawnGround(chunk: Vector2):
 	var lat = main.lat_center + main.lat_span * chunk.x
