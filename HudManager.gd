@@ -18,3 +18,4 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	playerPos = playerManager.getPlayerPosition()
 	lonLabel.text = "lon: " + str(playerPos.x)
+	latLabel.text = "lat: " + str(playerPos.z)
