@@ -1,14 +1,14 @@
 [gd_scene load_steps=10 format=3 uid="uid://bapisy87owa8v"]
 
-[ext_resource type="Script" path="res://SpawnManager.gd" id="1_qccge"]
-[ext_resource type="Script" path="res://objects/tree/tree_spawner.gd" id="2_6x53q"]
-[ext_resource type="Script" path="res://objects/picnic_table/picnic_table_spawner.gd" id="3_5dar5"]
-[ext_resource type="Script" path="res://objects/ground/ground_spawner.gd" id="4_sqli3"]
-[ext_resource type="Script" path="res://objects/street/street_spawner.gd" id="5_2ylbq"]
-[ext_resource type="Script" path="res://objects/house/house_spawner.gd" id="6_vub5m"]
-[ext_resource type="Script" path="res://objects/trash_basket/trash_basket_spawner.gd" id="7_rxlad"]
-[ext_resource type="Script" path="res://objects/hydrant/hydrant_spawner.gd" id="8_003j0"]
-[ext_resource type="Script" path="res://objects/street_light/street_light_spawner.gd" id="9_g33pg"]
+[ext_resource type="Script" uid="uid://dm23avs2jchg" path="res://SpawnManager.gd" id="1_qccge"]
+[ext_resource type="Script" uid="uid://c0qu8snn6po1j" path="res://objects/tree/tree_spawner.gd" id="2_6x53q"]
+[ext_resource type="Script" uid="uid://b8doaxhwbewbr" path="res://objects/picnic_table/picnic_table_spawner.gd" id="3_5dar5"]
+[ext_resource type="Script" uid="uid://boq45yktjenoe" path="res://objects/ground/ground_spawner.gd" id="4_sqli3"]
+[ext_resource type="Script" uid="uid://ylib7jiqiged" path="res://objects/street/street_spawner.gd" id="5_2ylbq"]
+[ext_resource type="Script" uid="uid://bumn6avdl5xnh" path="res://objects/house/house_spawner.gd" id="6_vub5m"]
+[ext_resource type="Script" uid="uid://cep8sf82216if" path="res://objects/trash_basket/trash_basket_spawner.gd" id="7_rxlad"]
+[ext_resource type="Script" uid="uid://cmgx7r7guwhx5" path="res://objects/hydrant/hydrant_spawner.gd" id="8_003j0"]
+[ext_resource type="Script" uid="uid://d0vpr2fioiowv" path="res://objects/street_light/street_light_spawner.gd" id="9_g33pg"]
 
 [node name="Spawner" type="Node3D"]
 script = ExtResource("1_qccge")

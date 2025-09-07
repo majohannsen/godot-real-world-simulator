@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://bt7aes2s6k73y"]
 
-[ext_resource type="Script" path="res://cars/Models/car.gd" id="1_yrlra"]
+[ext_resource type="Script" uid="uid://b6e0b74tf8mgg" path="res://cars/Models/car.gd" id="1_yrlra"]
 [ext_resource type="PackedScene" uid="uid://fdliqqju58ig" path="res://cars/Models/offroad_car/offroad_car.glb" id="2_oml5k"]
 [ext_resource type="PackedScene" uid="uid://2tgab7dl8uy3" path="res://cars/Models/offroad_car/offroad_car_tyre.glb" id="3_bessg"]
 [ext_resource type="PackedScene" uid="uid://8sl5gmdd6o6w" path="res://cars/camera/camera_3d.tscn" id="4_m7bnu"]

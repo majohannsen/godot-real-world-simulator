@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dfy8ufcuf8i0y"]
 
-[ext_resource type="Script" path="res://HudManager.gd" id="1_xu3w4"]
+[ext_resource type="Script" uid="uid://b43b76lbnm26p" path="res://HudManager.gd" id="1_xu3w4"]
 
 [node name="HUD" type="Control"]
 layout_mode = 3

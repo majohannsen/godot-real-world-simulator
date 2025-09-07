@@ -1,11 +1,11 @@
 [gd_scene load_steps=36 format=3 uid="uid://c3sccy6x0ht5j"]
 
-[ext_resource type="Script" path="res://addons/debug_draw_3d/examples_dd3d/DebugDrawDemoScene.gd" id="1"]
+[ext_resource type="Script" uid="uid://8lr5xei8353" path="res://addons/debug_draw_3d/examples_dd3d/DebugDrawDemoScene.gd" id="1"]
 [ext_resource type="FontFile" uid="uid://erdgllynwqkw" path="res://addons/debug_draw_3d/examples_dd3d/Roboto-Bold.ttf" id="2_aedbq"]
-[ext_resource type="Script" path="res://addons/debug_draw_3d/examples_dd3d/demo_camera_movement.gd" id="3_3m1mp"]
-[ext_resource type="Script" path="res://addons/debug_draw_3d/examples_dd3d/demo_music_visualizer.gd" id="4_eq2lt"]
-[ext_resource type="Script" path="res://addons/debug_draw_3d/examples_dd3d/demo_settings_panel.gd" id="5_31v5h"]
-[ext_resource type="Script" path="res://addons/debug_draw_3d/examples_dd3d/demo_web_docs_version_select.gd" id="6_07f7q"]
+[ext_resource type="Script" uid="uid://w7ptw1eiqf5g" path="res://addons/debug_draw_3d/examples_dd3d/demo_camera_movement.gd" id="3_3m1mp"]
+[ext_resource type="Script" uid="uid://swq4kugrlhid" path="res://addons/debug_draw_3d/examples_dd3d/demo_music_visualizer.gd" id="4_eq2lt"]
+[ext_resource type="Script" uid="uid://ibc0ajpvmlav" path="res://addons/debug_draw_3d/examples_dd3d/demo_settings_panel.gd" id="5_31v5h"]
+[ext_resource type="Script" uid="uid://b3owj45y0ailo" path="res://addons/debug_draw_3d/examples_dd3d/demo_web_docs_version_select.gd" id="6_07f7q"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_87638"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -124,8 +124,8 @@ tracks/3/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_nj4nv"]
 _data = {
-"New Anim": SubResource("9"),
-"RESET": SubResource("10")
+&"New Anim": SubResource("9"),
+&"RESET": SubResource("10")
 }
 
 [sub_resource type="Shader" id="Shader_621vv"]
@@ -165,7 +165,7 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cq37i"]
 _data = {
-"RESET": SubResource("Animation_ucqh5")
+&"RESET": SubResource("Animation_ucqh5")
 }
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_tigpa"]
@@ -221,8 +221,8 @@ tracks/1/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1)
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_vh8ml"]
 _data = {
-"New Anim": SubResource("6"),
-"RESET": SubResource("7")
+&"New Anim": SubResource("6"),
+&"RESET": SubResource("7")
 }
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rbfyn"]
@@ -257,7 +257,7 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_a7f1a"]
 _data = {
-"RESET": SubResource("8")
+&"RESET": SubResource("8")
 }
 
 [sub_resource type="Gradient" id="Gradient_tup4c"]
@@ -281,7 +281,7 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_0ity1"]
 _data = {
-"RESET": SubResource("Animation_n750a")
+&"RESET": SubResource("Animation_n750a")
 }
 
 [sub_resource type="Theme" id="3"]
