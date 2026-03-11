@@ -8,6 +8,7 @@ extends Node3D
 @onready var houseSpawner = $HouseSpawner
 @onready var trashBasketSpawner = $TrashBasketSpawner
 @onready var hydrantSpawner = $HydrantSpawner
+@onready var railSpawner = $RailSpawner
 
 @onready var main = get_parent()
 
@@ -26,6 +27,7 @@ func flush_all_instances():
 	trashBasketSpawner.flush_all_instances()
 	hydrantSpawner.flush_all_instances()
 	picnicTableSpawner.flush_all_instances()
+	railSpawner.flush_all_instances()
 
 func spawn_chunk(chunk):
 	groundSpawner.spawnGround(chunk)
@@ -48,6 +50,7 @@ func _fetchAllCoordinates(chunk: Vector2):
 		+'node[emergency=fire_hydrant];' \
 		+'way[highway];' \
 		+'way[building];' \
+		+'way["railway"="rail"];' \
 		+');out geom;'
 	var request = HTTPRequest.new()
 	add_child(request)
@@ -55,10 +58,13 @@ func _fetchAllCoordinates(chunk: Vector2):
 	request.request_completed.connect(_handleCombinedResponse)
 	request.request(baseUrl + query.uri_encode())
 
-func _handleCombinedResponse(_result, _response_code, _headers, body):
+func _handleCombinedResponse(result, response_code, _headers, body):
 	if _active_request and is_instance_valid(_active_request):
 		_active_request.queue_free()
 		_active_request = null
+	if result != HTTPRequest.RESULT_SUCCESS or response_code != 200:
+		print("Overpass request failed: result=%d, http=%d" % [result, response_code])
+		return
 	var json = JSON.parse_string(body.get_string_from_utf8())
 	if !json:
 		print("Combined response is empty")
@@ -72,6 +78,7 @@ func _handleCombinedResponse(_result, _response_code, _headers, body):
 	var hydrants = []
 	var streets = []
 	var houses = []
+	var rails = []
 
 	for element in all_elements:
 		if !element.has("tags"):
@@ -93,6 +100,8 @@ func _handleCombinedResponse(_result, _response_code, _headers, body):
 				houses.append(element)
 			elif tags.has("highway"):
 				streets.append(element)
+			elif tags.has("railway") and tags["railway"] == "rail":
+				rails.append(element)
 
 	streetLightSpawner.handleData(street_lights)
 	treeSpawner.handleData(trees)
@@ -101,3 +110,4 @@ func _handleCombinedResponse(_result, _response_code, _headers, body):
 	hydrantSpawner.handleData(hydrants)
 	streetSpawner.handleData(streets)
 	houseSpawner.handleData(houses)
+	railSpawner.handleData(rails)

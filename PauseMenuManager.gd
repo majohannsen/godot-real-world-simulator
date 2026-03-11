@@ -9,6 +9,7 @@ extends Control
 @onready var stefansplatzButton = $PanelContainer/MarginContainer/HBoxContainer/LocationsVBox/Stefansplatz
 @onready var lustenauButton = $PanelContainer/MarginContainer/HBoxContainer/LocationsVBox/Lustenau
 @onready var karlsplatzButton = $PanelContainer/MarginContainer/HBoxContainer/LocationsVBox/Karlsplatz
+@onready var viennaHbfButton = $PanelContainer/MarginContainer/HBoxContainer/LocationsVBox/ViennaHbf
 
 const gasometer_lat = 47.42380
 const gasometer_lon = 9.65680
@@ -22,6 +23,9 @@ const lustenau_lon = 9.65680
 const karlsplatz_lat = 48.1999922
 const karlsplatz_lon = 16.3702657
 
+const viennaHbf_lat = 48.1850709
+const viennaHbf_lon = 16.3763051
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	carButton.pressed.connect(self.switchToCar)
@@ -30,6 +34,7 @@ func _ready() -> void:
 	stefansplatzButton.pressed.connect(self.centerOnStefansplatz)
 	lustenauButton.pressed.connect(self.centerOnLustenau)
 	karlsplatzButton.pressed.connect(self.centerOnKarlsplatz)
+	viennaHbfButton.pressed.connect(self.centerOnViennaHbf)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -62,4 +67,9 @@ func centerOnLustenau():
 func centerOnKarlsplatz():
 	playerManager.setPlayerPositionOnZero()
 	get_parent().setNewCenterPosition(karlsplatz_lat, karlsplatz_lon)
+	hide()
+
+func centerOnViennaHbf():
+	playerManager.setPlayerPositionOnZero()
+	get_parent().setNewCenterPosition(viennaHbf_lat, viennaHbf_lon)
 	hide()

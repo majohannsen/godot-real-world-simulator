@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://dxrail0shape1x"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rail"]
+albedo_color = Color(0.25, 0.25, 0.25, 1)
+
+[node name="RailShape" type="CSGPolygon3D"]
+polygon = PackedVector2Array(-1.32628, 0.0994101, 1.54692, 0.0994101, 1.55419, 0, -1.32628, 0.00242466)
+mode = 2
+path_node = NodePath("..")
+path_interval_type = 0
+path_interval = 1.0
+path_simplify_angle = 0.0
+path_rotation = 2
+path_rotation_accurate = false
+path_local = false
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+material = SubResource("StandardMaterial3D_rail")

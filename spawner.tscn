@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://cep8sf82216if" path="res://objects/trash_basket/trash_basket_spawner.gd" id="7_rxlad"]
 [ext_resource type="Script" uid="uid://cmgx7r7guwhx5" path="res://objects/hydrant/hydrant_spawner.gd" id="8_003j0"]
 [ext_resource type="Script" uid="uid://d0vpr2fioiowv" path="res://objects/street_light/street_light_spawner.gd" id="9_g33pg"]
+[ext_resource type="Script" path="res://objects/rail/rail_spawner.gd" id="10_rail"]
 
 [node name="Spawner" type="Node3D" unique_id=815357746]
 script = ExtResource("1_qccge")
@@ -36,3 +37,6 @@ script = ExtResource("8_003j0")
 
 [node name="StreetLightSpawner" type="Node3D" parent="." unique_id=185324016]
 script = ExtResource("9_g33pg")
+
+[node name="RailSpawner" type="Node3D" parent="." unique_id=291847103]
+script = ExtResource("10_rail")
