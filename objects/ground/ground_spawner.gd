@@ -9,9 +9,8 @@ func spawnGround(chunk: Vector2):
 	var lon = main.lon_center + main.lon_span * chunk.y
 	var coords = main.latLonToCoordsInMeters(lat, lon)
 	var inst: StaticBody3D = ground.instantiate()
-	inst.transform.origin = Vector3(coords.x,0,coords.y)
+	inst.transform.origin = Vector3(coords.x, 0, coords.y)
 	add_child(inst)
-	print("spawned ground")
 
 func flush_all_instances():
 	for child in get_children():

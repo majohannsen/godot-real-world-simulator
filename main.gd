@@ -16,10 +16,13 @@ var lon_center = 16.413616
 
 var loadedChunks: Dictionary = {}
 
-var center
+# Store as 64-bit floats rather than Vector2 (which is 32-bit) to preserve
+# sub-meter precision when subtracting from absolute Web Mercator coordinates.
+var center_x: float
+var center_y: float
 
 func latLonToCoordsInMeters(lat, lon):
-	return calculator.latLonToCoordsInMeters(lat, lon, center)
+	return calculator.latLonToCoordsInMeters(lat, lon, center_x, center_y)
 
 func getChunkWidth():
 	var lat1 = lat_center - lat_span / 2
@@ -44,7 +47,8 @@ func getChunkHeight():
 func setNewCenterPosition(lat, lon):
 	lat_center = lat
 	lon_center = lon
-	center = Vector2(calculator.latToMeter(lat), calculator.lonToMeter(lat, lon))
+	center_x = calculator.latToMeter(lat)
+	center_y = calculator.lonToMeter(lat, lon)
 	spawner.flush_all_instances()
 	loadedChunks = {}
 	spawnChunk(getCurrentChunk())
@@ -79,7 +83,8 @@ func drawDebugChunkOutline():
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pauseMenu.hide()
-	center = Vector2(calculator.latToMeter(lat_center), calculator.lonToMeter(lat_center, lon_center))
+	center_x = calculator.latToMeter(lat_center)
+	center_y = calculator.lonToMeter(lat_center, lon_center)
 	DebugDraw3D.scoped_config().set_thickness(1)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -91,13 +96,10 @@ func _process(_delta):
 		else:
 			pauseMenu.show()
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	
-	if !loadedChunks.has(getCurrentChunk()):
-		loadedChunks[getCurrentChunk()] = true
-		spawnChunk(getCurrentChunk())
-		print("loadedChunks")
-		print(center)
-		print(lat_center)
-		print(12)
+	var currentChunk = getCurrentChunk()
+	if !loadedChunks.has(currentChunk):
+		loadedChunks[currentChunk] = true
+		spawnChunk(currentChunk)
+		print("Spawned chunk: ", currentChunk)
 	
 	drawDebugChunkOutline()

@@ -57,6 +57,10 @@ text = "Stefansplatz"
 layout_mode = 2
 text = "Lustenau"
 
+[node name="Karlsplatz" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer/LocationsVBox" unique_id=1976293877]
+layout_mode = 2
+text = "Karlsplatz"
+
 [node name="PlayersVbox" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer" unique_id=917845204]
 layout_mode = 2
 
