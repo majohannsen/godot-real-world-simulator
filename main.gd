@@ -8,7 +8,6 @@ var lat_center = 48.18574
 var lon_center = 16.413616
 
 
-
 @onready var spawner = $Spawner
 @onready var pauseMenu = $PauseMenu
 @onready var playerManager = $PlayerManager
@@ -23,19 +22,19 @@ func latLonToCoordsInMeters(lat, lon):
 	return calculator.latLonToCoordsInMeters(lat, lon, center)
 
 func getChunkWidth():
-	var lat1 = lat_center - lat_span/2  
-	var lat2 = lat_center + lat_span/2  
-	var lon1 = lon_center - lon_span/2 
-	var lon2 = lon_center + lon_span/2 
+	var lat1 = lat_center - lat_span / 2
+	var lat2 = lat_center + lat_span / 2
+	var lon1 = lon_center - lon_span / 2
+	var lon2 = lon_center + lon_span / 2
 	var pos1 = latLonToCoordsInMeters(lat1, lon1)
 	var pos2 = latLonToCoordsInMeters(lat2, lon2)
 	return pos2.x - pos1.x
 
 func getChunkHeight():
-	var lat1 = lat_center - lat_span/2  
-	var lat2 = lat_center + lat_span/2  
-	var lon1 = lon_center - lon_span/2 
-	var lon2 = lon_center + lon_span/2 
+	var lat1 = lat_center - lat_span / 2
+	var lat2 = lat_center + lat_span / 2
+	var lon1 = lon_center - lon_span / 2
+	var lon2 = lon_center + lon_span / 2
 	var pos1 = latLonToCoordsInMeters(lat1, lon1)
 	var pos2 = latLonToCoordsInMeters(lat2, lon2)
 	return pos2.y - pos1.y
@@ -58,9 +57,24 @@ func getCurrentChunk():
 	var currentChunk = Vector2()
 	var gamecoords = playerManager.getPlayerPosition()
 	var coords = latLonToCoordsInMeters(lat_center, lon_center) + Vector2(gamecoords.x, gamecoords.z)
-	currentChunk.x = round(coords.x/getChunkWidth()) 
-	currentChunk.y = round(coords.y/getChunkHeight()) 
+	currentChunk.x = round(coords.x / getChunkWidth())
+	currentChunk.y = round(coords.y / getChunkHeight())
 	return currentChunk
+
+func drawDebugChunkOutline():
+	for key in loadedChunks.keys():
+		var chunk = Vector2(key)
+		var lat1 = lat_center - lat_span / 2 + lat_span * chunk.x
+		var lat2 = lat_center + lat_span / 2 + lat_span * chunk.x
+		var lon1 = lon_center - lon_span / 2 + lon_span * chunk.y
+		var lon2 = lon_center + lon_span / 2 + lon_span * chunk.y
+		var pos1 = latLonToCoordsInMeters(lat1, lon1)
+		var pos2 = latLonToCoordsInMeters(lat2, lon2)
+		DebugDraw3D.draw_line(Vector3(pos1.x, 0, pos1.y), Vector3(pos2.x, 0, pos2.y), Color(1, 1, 0))
+		DebugDraw3D.draw_line(Vector3(pos1.x, 0, pos1.y), Vector3(pos1.x, 0, pos2.y), Color(1, 1, 0))
+		DebugDraw3D.draw_line(Vector3(pos1.x, 0, pos1.y), Vector3(pos2.x, 0, pos1.y), Color(1, 1, 0))
+		DebugDraw3D.draw_line(Vector3(pos2.x, 0, pos1.y), Vector3(pos2.x, 0, pos2.y), Color(1, 1, 0))
+		DebugDraw3D.draw_line(Vector3(pos1.x, 0, pos2.y), Vector3(pos2.x, 0, pos2.y), Color(1, 1, 0))
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -69,7 +83,7 @@ func _ready():
 	DebugDraw3D.scoped_config().set_thickness(1)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	if Input.is_action_just_pressed("ui_cancel"):
 		if pauseMenu.visible:
 			pauseMenu.hide()
@@ -86,16 +100,4 @@ func _process(delta):
 		print(lat_center)
 		print(12)
 	
-	#for key in loadedChunks.keys():
-		#var chunk = Vector2(key)
-		#var lat1 = lat_center - lat_span/2 + lat_span * chunk.x
-		#var lat2 = lat_center + lat_span/2 + lat_span * chunk.x
-		#var lon1 = lon_center - lon_span/2 + lon_span * chunk.y
-		#var lon2 = lon_center + lon_span/2 + lon_span * chunk.y
-		#var pos1 = latLonToCoordsInMeters(lat1, lon1)
-		#var pos2 = latLonToCoordsInMeters(lat2, lon2)
-		#DebugDraw3D.draw_line(Vector3(pos1.x, 0, pos1.y), Vector3(pos2.x, 0, pos2.y), Color(1, 1, 0))
-		#DebugDraw3D.draw_line(Vector3(pos1.x, 0, pos1.y), Vector3(pos1.x, 0, pos2.y), Color(1, 1, 0))
-		#DebugDraw3D.draw_line(Vector3(pos1.x, 0, pos1.y), Vector3(pos2.x, 0, pos1.y), Color(1, 1, 0))
-		#DebugDraw3D.draw_line(Vector3(pos2.x, 0, pos1.y), Vector3(pos2.x, 0, pos2.y), Color(1, 1, 0))
-		#DebugDraw3D.draw_line(Vector3(pos1.x, 0, pos2.y), Vector3(pos2.x, 0, pos2.y), Color(1, 1, 0))
+	drawDebugChunkOutline()

@@ -1,0 +1,29 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Game",
+            "type": "godot",
+            "request": "launch",
+            "project": "${workspaceFolder}",
+            "port": 6007,
+            "address": "127.0.0.1"
+        },
+        {
+            "name": "Launch Current Scene",
+            "type": "godot",
+            "request": "launch",
+            "project": "${workspaceFolder}",
+            "port": 6007,
+            "address": "127.0.0.1",
+            "scene": "current"
+        },
+        {
+            "name": "Attach to Godot",
+            "type": "godot",
+            "request": "attach",
+            "port": 6007,
+            "address": "127.0.0.1"
+        }
+    ]
+}

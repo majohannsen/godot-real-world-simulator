@@ -6,29 +6,9 @@ var street_shape = preload("res://objects/street/street_shape.tscn")
 
 
 
-func fetchCoordinates(chunk: Vector2):
-	var lat1 = main.lat_center - main.lat_span/2 + main.lat_span * chunk.x
-	var lat2 = main.lat_center + main.lat_span/2 + main.lat_span * chunk.x
-	var lon1 = main.lon_center - main.lon_span/2 + main.lon_span * chunk.y
-	var lon2 = main.lon_center + main.lon_span/2 + main.lon_span * chunk.y
-	var baseUrl = 'https://overpass-api.de/api/interpreter'+"?data=" 
-	var bbox = "[bbox:%s,%s,%s,%s]" % [lat1,lon1,lat2,lon2]
-	var out = '[out:json]'
-	var timeout = '[timeout:10]'
-	var query = bbox+out+timeout+';way[highway];out geom;'
-	var request = HTTPRequest.new()
-	add_child(request)
-	request.request_completed.connect(handleOverpassResponse)
-	request.request(baseUrl+query.uri_encode())
-
-func handleOverpassResponse(result, response_code, headers, body):
-	var json = JSON.parse_string(body.get_string_from_utf8())
-	if !json: 
-		print("Response is empty")
-		return
-	var fetchedStreets = json["elements"]
+func handleData(data: Array):
 	var streets: Array = []
-	for street in fetchedStreets:
+	for street in data:
 		var points: Array[Vector2] = []
 		for point in street["geometry"]:
 			var lat = point["lat"]

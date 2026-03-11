@@ -4,30 +4,11 @@ var house = preload("res://objects/house/house.tscn")
 
 @onready var main = get_parent().get_parent()
 
-func fetchCoordinates(chunk: Vector2):
-	var lat1 = main.lat_center - main.lat_span/2 + main.lat_span * chunk.x
-	var lat2 = main.lat_center + main.lat_span/2 + main.lat_span * chunk.x
-	var lon1 = main.lon_center - main.lon_span/2 + main.lon_span * chunk.y
-	var lon2 = main.lon_center + main.lon_span/2 + main.lon_span * chunk.y
-	var baseUrl = 'https://overpass-api.de/api/interpreter'+"?data=" 
-	var bbox = "[bbox:%s,%s,%s,%s]" % [lat1,lon1,lat2,lon2]
-	var out = '[out:json]'
-	var timeout = '[timeout:10]'
-	var query = bbox+out+timeout+';way[building];out geom;'
-	var request = HTTPRequest.new()
-	add_child(request)
-	request.request_completed.connect(handleOverpassResponse)
-	request.request(baseUrl+query.uri_encode())
 
-func handleOverpassResponse(result, response_code, headers, body):
-	var json = JSON.parse_string(body.get_string_from_utf8())
-	if !json: 
-		print("Response is empty")
-		return
-	var buildings = json["elements"]
+func handleData(data: Array):
 	var houses: Array = []
 	var heights: Array = []
-	for building in buildings:
+	for building in data:
 		var corners = building["geometry"]
 		var cornersInMeters = []
 		for corner in corners:
@@ -56,12 +37,12 @@ func spawnHouse(corners, height):
 	mesh.mode = CSGPolygon3D.MODE_DEPTH
 	mesh.depth = height;
 	collider.depth = height
-	mesh.rotate_x(PI/2);
-	collider.rotate_x(PI/2);
+	mesh.rotate_x(PI / 2);
+	collider.rotate_x(PI / 2);
 	mesh.polygon = corners
 	collider.polygon = corners
 	var pos = collider.transform.origin
-	pos.y = height/2;
+	pos.y = height / 2;
 	collider.transform.origin = pos
 	var inst: StaticBody3D = StaticBody3D.new()
 	inst.add_child(mesh)
