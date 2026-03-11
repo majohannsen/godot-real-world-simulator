@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bapisy87owa8v"]
+[gd_scene format=3 uid="uid://bapisy87owa8v"]
 
 [ext_resource type="Script" uid="uid://dm23avs2jchg" path="res://SpawnManager.gd" id="1_qccge"]
 [ext_resource type="Script" uid="uid://c0qu8snn6po1j" path="res://objects/tree/tree_spawner.gd" id="2_6x53q"]
@@ -10,29 +10,29 @@
 [ext_resource type="Script" uid="uid://cmgx7r7guwhx5" path="res://objects/hydrant/hydrant_spawner.gd" id="8_003j0"]
 [ext_resource type="Script" uid="uid://d0vpr2fioiowv" path="res://objects/street_light/street_light_spawner.gd" id="9_g33pg"]
 
-[node name="Spawner" type="Node3D"]
+[node name="Spawner" type="Node3D" unique_id=815357746]
 script = ExtResource("1_qccge")
 
-[node name="TreeSpawner" type="Node3D" parent="."]
+[node name="TreeSpawner" type="Node3D" parent="." unique_id=579095650]
 script = ExtResource("2_6x53q")
 
-[node name="PicnicTableSpawner" type="Node3D" parent="."]
+[node name="PicnicTableSpawner" type="Node3D" parent="." unique_id=778204039]
 script = ExtResource("3_5dar5")
 
-[node name="GroundSpawner" type="Node3D" parent="."]
+[node name="GroundSpawner" type="Node3D" parent="." unique_id=601566639]
 script = ExtResource("4_sqli3")
 
-[node name="StreetSpawner" type="Node3D" parent="."]
+[node name="StreetSpawner" type="Node3D" parent="." unique_id=443008131]
 script = ExtResource("5_2ylbq")
 
-[node name="HouseSpawner" type="Node3D" parent="."]
+[node name="HouseSpawner" type="Node3D" parent="." unique_id=730498735]
 script = ExtResource("6_vub5m")
 
-[node name="TrashBasketSpawner" type="Node3D" parent="."]
+[node name="TrashBasketSpawner" type="Node3D" parent="." unique_id=908155781]
 script = ExtResource("7_rxlad")
 
-[node name="HydrantSpawner" type="Node3D" parent="."]
+[node name="HydrantSpawner" type="Node3D" parent="." unique_id=959827021]
 script = ExtResource("8_003j0")
 
-[node name="StreetLightSpawner" type="Node3D" parent="."]
+[node name="StreetLightSpawner" type="Node3D" parent="." unique_id=185324016]
 script = ExtResource("9_g33pg")

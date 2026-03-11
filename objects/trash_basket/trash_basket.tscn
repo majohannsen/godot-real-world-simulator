@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://cidkfsgbo536o"]
+[gd_scene format=3 uid="uid://cidkfsgbo536o"]
 
 [ext_resource type="PackedScene" uid="uid://dfipjixyt38j3" path="res://objects/trash_basket/trash_basket.glb" id="1_o1s27"]
 
-[node name="TrashBasket" type="Node3D"]
+[node name="TrashBasket" type="Node3D" unique_id=2031876794]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
 
-[node name="Object" parent="." instance=ExtResource("1_o1s27")]
+[node name="Object" parent="." unique_id=216499995 instance=ExtResource("1_o1s27")]

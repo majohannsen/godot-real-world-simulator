@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://ong4vy8hl0oj"]
+[gd_scene format=3 uid="uid://ong4vy8hl0oj"]
 
 [ext_resource type="Script" uid="uid://c0bbn4jr1opv0" path="res://main.gd" id="1_ag4ow"]
 [ext_resource type="Script" uid="uid://cr1fwbcsn10on" path="res://PlayerManager.gd" id="3_86kqk"]
@@ -20,25 +20,25 @@ sky_material = SubResource("ProceduralSkyMaterial_g2g6w")
 background_mode = 2
 sky = SubResource("Sky_0wkt1")
 
-[node name="Main" type="Node3D"]
+[node name="Main" type="Node3D" unique_id=700197978]
 script = ExtResource("1_ag4ow")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1034685922]
 environment = SubResource("Environment_6rave")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1135367944]
 transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
 light_color = Color(0.913725, 0.788235, 0.670588, 1)
 shadow_enabled = true
 
-[node name="Spawner" parent="." instance=ExtResource("3_gujul")]
+[node name="Spawner" parent="." unique_id=1379679545 instance=ExtResource("3_gujul")]
 
-[node name="PlayerManager" type="Node" parent="."]
+[node name="PlayerManager" type="Node" parent="." unique_id=1157399415]
 script = ExtResource("3_86kqk")
 
-[node name="HUD" parent="." instance=ExtResource("4_ddviv")]
+[node name="HUD" parent="." unique_id=558261794 instance=ExtResource("4_ddviv")]
 
-[node name="PauseMenu" parent="." instance=ExtResource("5_61y7o")]
+[node name="PauseMenu" parent="." unique_id=1937164496 instance=ExtResource("5_61y7o")]
 
-[node name="Calculator" type="Node" parent="."]
+[node name="Calculator" type="Node" parent="." unique_id=710820583]
 script = ExtResource("7_g52vg")

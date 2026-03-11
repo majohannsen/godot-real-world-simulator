@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://dqkvitg1kl02i"]
+[gd_scene format=3 uid="uid://dqkvitg1kl02i"]
 
 [ext_resource type="Script" uid="uid://ciao5yojg2d4p" path="res://skid_mark.gd" id="1_e6qqi"]
 
@@ -11,22 +11,22 @@ albedo_color = Color(0, 0, 0, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_es4ae"]
 albedo_color = Color(0, 0, 0, 1)
 
-[node name="SkidMark" type="Node3D"]
+[node name="SkidMark" type="Node3D" unique_id=213398222]
 script = ExtResource("1_e6qqi")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=862212422]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -1.027, 0.1, 1.213)
 cast_shadow = 0
 mesh = SubResource("PlaneMesh_k0r41")
 surface_material_override/0 = SubResource("StandardMaterial3D_rqbeg")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=1506671203]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0.997, 0.1, 1.213)
 cast_shadow = 0
 mesh = SubResource("PlaneMesh_k0r41")
 surface_material_override/0 = SubResource("StandardMaterial3D_es4ae")
 
-[node name="Timer" type="Timer" parent="."]
+[node name="Timer" type="Timer" parent="." unique_id=1406773060]
 wait_time = 26.894
 autostart = true
 

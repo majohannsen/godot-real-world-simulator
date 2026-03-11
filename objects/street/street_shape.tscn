@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cq0c4rd3yypib"]
+[gd_scene format=3 uid="uid://cq0c4rd3yypib"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vbpf5"]
 transparency = 1
@@ -40,7 +40,7 @@ _surfaces = [{
 "vertex_data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 160, 123, 18, 44, 205, 204, 204, 61, 0, 0, 0, 0, 0, 0, 128, 63, 205, 204, 204, 61, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 0, 0)
 }]
 
-[node name="StreetShape" type="CSGPolygon3D"]
+[node name="StreetShape" type="CSGPolygon3D" unique_id=630218078]
 polygon = PackedVector2Array(-1.32628, 0.0994101, 1.54692, 0.0994101, 1.55419, 0, -1.32628, 0.00242466)
 mode = 2
 path_node = NodePath("..")
@@ -54,12 +54,12 @@ path_continuous_u = true
 path_u_distance = 1.0
 path_joined = false
 
-[node name="_MeshInstance3D_59986" type="MeshInstance3D" parent="."]
+[node name="_MeshInstance3D_59986" type="MeshInstance3D" parent="." unique_id=1221912131]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
 visible = false
 material_override = SubResource("StandardMaterial3D_vbpf5")
 mesh = SubResource("ImmediateMesh_hpox5")
 
-[node name="_MeshInstance3D_14098" type="MeshInstance3D" parent="_MeshInstance3D_59986"]
+[node name="_MeshInstance3D_14098" type="MeshInstance3D" parent="_MeshInstance3D_59986" unique_id=1746262513]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1e-05)
 mesh = SubResource("ArrayMesh_js1x0")

@@ -1,9 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://c3nsjkvfbppwp"]
+[gd_scene format=3 uid="uid://c3nsjkvfbppwp"]
 
 [ext_resource type="PackedScene" uid="uid://b2y15a7mj547m" path="res://objects/hydrant/hydrant.glb" id="1_yj1lc"]
 
-[node name="Hydrant" type="Node3D"]
+[node name="Hydrant" type="Node3D" unique_id=2085313040]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
 
-[node name="hydrant" parent="." instance=ExtResource("1_yj1lc")]
+[node name="hydrant" parent="." unique_id=1967418271 instance=ExtResource("1_yj1lc")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.459101, 0)
