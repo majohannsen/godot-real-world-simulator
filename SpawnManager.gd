@@ -16,19 +16,22 @@ var _active_request: HTTPRequest = null
 const MAX_RETRIES = 3
 const CACHE_DIR = "user://chunk_cache/"
 const CACHE_TTL_SECONDS = 7 * 24 * 3600 # 7 days
+const CHUNK_M = 1000.0
 var _pending_url: String = ""
-var _loading_chunk: Vector2
+var _loading_chunk: Vector2i
 var _retry_count: int = 0
-var _chunk_nodes: Array[Node3D] = []
+var _chunk_nodes: Dictionary = {} # Vector2i tile -> Node3D
+var _load_queue: Array[Vector2i] = []
+var _is_busy: bool = false
 
 func _ready():
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(CACHE_DIR))
 
-func _cache_path(chunk: Vector2) -> String:
-	return CACHE_DIR + "chunk_%d_%d.json" % [int(chunk.x), int(chunk.y)]
+func _cache_path(tile: Vector2i) -> String:
+	return CACHE_DIR + "tile_%d_%d.json" % [tile.x, tile.y]
 
-func _load_cache(chunk: Vector2) -> String:
-	var path = _cache_path(chunk)
+func _load_cache(tile: Vector2i) -> String:
+	var path = _cache_path(tile)
 	if not FileAccess.file_exists(path):
 		return ""
 	var modified = FileAccess.get_modified_time(path)
@@ -40,8 +43,8 @@ func _load_cache(chunk: Vector2) -> String:
 		return ""
 	return f.get_as_text()
 
-func _save_cache(chunk: Vector2, json_text: String) -> void:
-	var f = FileAccess.open(_cache_path(chunk), FileAccess.WRITE)
+func _save_cache(tile: Vector2i, json_text: String) -> void:
+	var f = FileAccess.open(_cache_path(tile), FileAccess.WRITE)
 	if f:
 		f.store_string(json_text)
 
@@ -57,28 +60,65 @@ func _cancel_in_progress_load():
 
 func flush_all_instances():
 	_cancel_in_progress_load()
-	for node in _chunk_nodes:
+	_load_queue = []
+	_is_busy = false
+	for tile in _chunk_nodes.keys():
+		var node = _chunk_nodes[tile]
 		if is_instance_valid(node):
 			node.queue_free()
-	_chunk_nodes = []
+	_chunk_nodes = {}
 
-func spawn_chunk(chunk: Vector2):
-	_cancel_in_progress_load()
-	_loading_chunk = chunk
-	var cached = _load_cache(chunk)
-	if cached != "":
-		print("Loaded data for chunk %s from cache" % chunk)
-		_processJson(chunk, cached)
+func shift_all_roots(delta_mx: float, delta_my: float):
+	for tile in _chunk_nodes.keys():
+		var node = _chunk_nodes[tile]
+		if is_instance_valid(node):
+			node.position += Vector3(delta_mx, 0, delta_my)
+
+func unload_chunk(tile: Vector2i):
+	_load_queue.erase(tile)
+	if _loading_chunk == tile:
+		_cancel_in_progress_load()
+		_on_load_done()
+	var node = _chunk_nodes.get(tile)
+	if node and is_instance_valid(node):
+		node.queue_free()
+	_chunk_nodes.erase(tile)
+
+func spawn_chunk(tile: Vector2i):
+	if _is_busy:
+		if not _load_queue.has(tile):
+			_load_queue.append(tile)
 		return
-	_fetchAllCoordinates(chunk)
+	_load_tile(tile)
 
-func _fetchAllCoordinates(chunk: Vector2):
-	print("Fetching data for chunk %s from Overpass API..." % chunk)
-	
-	var lat1 = main.lat_center - main.lat_span / 2 + main.lat_span * chunk.x
-	var lat2 = main.lat_center + main.lat_span / 2 + main.lat_span * chunk.x
-	var lon1 = main.lon_center - main.lon_span / 2 + main.lon_span * chunk.y
-	var lon2 = main.lon_center + main.lon_span / 2 + main.lon_span * chunk.y
+func _load_tile(tile: Vector2i):
+	_is_busy = true
+	_loading_chunk = tile
+	var cached = _load_cache(tile)
+	if cached != "":
+		print("Loaded data for chunk %s from cache" % tile)
+		_processJson(tile, cached)
+		return
+	_fetchAllCoordinates(tile)
+
+func _on_load_done():
+	if not _is_busy:
+		return
+	_is_busy = false
+	while _load_queue.size() > 0:
+		var next = _load_queue.pop_front()
+		if main.loadedChunks.has(next) and not main.loadedChunks[next]:
+			_load_tile(next)
+			return
+
+func _fetchAllCoordinates(tile: Vector2i):
+	print("Fetching data for chunk %s from Overpass API..." % tile)
+	var min_corner = main.calculator.metersToLatLon(tile.x * CHUNK_M, tile.y * CHUNK_M)
+	var max_corner = main.calculator.metersToLatLon((tile.x + 1) * CHUNK_M, (tile.y + 1) * CHUNK_M)
+	var lat1 = min_corner.x
+	var lon1 = min_corner.y
+	var lat2 = max_corner.x
+	var lon2 = max_corner.y
 	var baseUrl = 'https://overpass-api.de/api/interpreter' + "?data="
 	var bbox = "[bbox:%s,%s,%s,%s]" % [lat1, lon1, lat2, lon2]
 	var out = '[out:json]'
@@ -105,9 +145,9 @@ func _doRequest():
 	request.request(_pending_url)
 
 func _handleCombinedResponse(result, response_code, _headers, body):
-	# Capture chunk locally — _loading_chunk may be overwritten if spawn_chunk
+	# Capture tile locally — _loading_chunk may be overwritten if spawn_chunk
 	# is called again before the awaited spawners finish.
-	var chunk = _loading_chunk
+	var tile = _loading_chunk
 	if _active_request and is_instance_valid(_active_request):
 		_active_request.queue_free()
 		_active_request = null
@@ -120,19 +160,22 @@ func _handleCombinedResponse(result, response_code, _headers, body):
 			await get_tree().create_timer(delay).timeout
 			if _pending_url != "": # may have been cancelled by flush
 				_doRequest()
+		else:
+			_on_load_done()
 		return
 	var json_text = body.get_string_from_utf8()
-	_save_cache(chunk, json_text)
-	_processJson(chunk, json_text)
+	_save_cache(tile, json_text)
+	_processJson(tile, json_text)
 
-func _processJson(chunk: Vector2, json_text: String) -> void:
+func _processJson(tile: Vector2i, json_text: String) -> void:
 	var json = JSON.parse_string(json_text)
 	if not json:
 		print("Combined response is empty or invalid")
+		_on_load_done()
 		return
-	
-	print("Processing chunk %s, elements: %d" % [chunk, json["elements"].size()])
-	
+
+	print("Processing chunk %s, elements: %d" % [tile, json["elements"].size()])
+
 	var all_elements = json["elements"]
 
 	var street_lights = []
@@ -167,21 +210,40 @@ func _processJson(chunk: Vector2, json_text: String) -> void:
 			elif tags.has("railway") and tags["railway"] == "rail":
 				rails.append(element)
 
+	var tile_center_mx: float = (tile.x + 0.5) * CHUNK_M
+	var tile_center_my: float = (tile.y + 0.5) * CHUNK_M
+
 	var chunk_root = Node3D.new()
 	chunk_root.visible = false
+	chunk_root.position = Vector3(tile_center_mx - main.origin_mx, 0, tile_center_my - main.origin_my)
 	add_child(chunk_root)
-	_chunk_nodes.append(chunk_root)
+	_chunk_nodes[tile] = chunk_root
 
-	groundSpawner.spawnGround(chunk, chunk_root)
-	await streetLightSpawner.handleData(street_lights, chunk_root)
-	await treeSpawner.handleData(trees, chunk_root)
-	await picnicTableSpawner.handleData(picnic_tables, chunk_root)
-	await trashBasketSpawner.handleData(trash_baskets, chunk_root)
-	await hydrantSpawner.handleData(hydrants, chunk_root)
-	await streetSpawner.handleData(streets, chunk_root)
-	await houseSpawner.handleData(houses, chunk_root)
-	await railSpawner.handleData(rails, chunk_root)
+	groundSpawner.spawnGround(tile, chunk_root, tile_center_mx, tile_center_my)
+	await streetLightSpawner.handleData(street_lights, chunk_root, tile_center_mx, tile_center_my)
+	if not is_instance_valid(chunk_root):
+		return
+	await treeSpawner.handleData(trees, chunk_root, tile_center_mx, tile_center_my)
+	if not is_instance_valid(chunk_root):
+		return
+	await picnicTableSpawner.handleData(picnic_tables, chunk_root, tile_center_mx, tile_center_my)
+	if not is_instance_valid(chunk_root):
+		return
+	await trashBasketSpawner.handleData(trash_baskets, chunk_root, tile_center_mx, tile_center_my)
+	if not is_instance_valid(chunk_root):
+		return
+	await hydrantSpawner.handleData(hydrants, chunk_root, tile_center_mx, tile_center_my)
+	if not is_instance_valid(chunk_root):
+		return
+	await streetSpawner.handleData(streets, chunk_root, tile_center_mx, tile_center_my)
+	if not is_instance_valid(chunk_root):
+		return
+	await houseSpawner.handleData(houses, chunk_root, tile_center_mx, tile_center_my)
+	if not is_instance_valid(chunk_root):
+		return
+	await railSpawner.handleData(rails, chunk_root, tile_center_mx, tile_center_my)
 
 	if is_instance_valid(chunk_root):
 		chunk_root.visible = true
-		main.onChunkLoaded(chunk)
+		main.onChunkLoaded(tile)
+	_on_load_done()

@@ -6,7 +6,7 @@ var house = preload("res://objects/house/house.tscn")
 @onready var main = get_parent().get_parent()
 
 
-func handleData(data: Array, container: Node3D):
+func handleData(data: Array, container: Node3D, tile_center_mx: float, tile_center_my: float):
 	var houses: Array = []
 	var heights: Array = []
 	for building in data:
@@ -15,7 +15,10 @@ func handleData(data: Array, container: Node3D):
 		for corner in corners:
 			var lat = corner["lat"]
 			var lon = corner["lon"]
-			cornersInMeters.append(main.latLonToCoordsInMeters(lat, lon))
+			cornersInMeters.append(Vector2(
+				main.calculator.latToMeter(lat) - tile_center_mx,
+				main.calculator.lonToMeter(lon) - tile_center_my
+			))
 		houses.append(cornersInMeters)
 		var height = DEFAULT_HEIGHT
 		if building.has("tags"):

@@ -5,12 +5,15 @@ var street_shape = preload("res://objects/street/street_shape.tscn")
 
 @onready var main = get_parent().get_parent()
 
-func handleData(data: Array, container: Node3D):
+func handleData(data: Array, container: Node3D, tile_center_mx: float, tile_center_my: float):
 	var streets: Array = []
 	for street in data:
 		var points: Array[Vector2] = []
 		for point in street["geometry"]:
-			points.append(main.latLonToCoordsInMeters(point["lat"], point["lon"]))
+			points.append(Vector2(
+				main.calculator.latToMeter(point["lat"]) - tile_center_mx,
+				main.calculator.lonToMeter(point["lon"]) - tile_center_my
+			))
 		streets.append(points)
 	for i in streets.size():
 		if i % BATCH_SIZE == 0:

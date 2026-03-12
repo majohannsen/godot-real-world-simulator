@@ -75,3 +75,17 @@ text = "Car"
 [node name="FlyAroundButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer/PlayersVbox" unique_id=1848862516]
 layout_mode = 2
 text = "Fly Around"
+
+[node name="RenderDistanceVBox" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer" unique_id=2041987001]
+layout_mode = 2
+
+[node name="RenderDistanceLabel" type="Label" parent="PanelContainer/MarginContainer/HBoxContainer/RenderDistanceVBox" unique_id=2041987002]
+layout_mode = 2
+text = "Render distance: 3 chunks"
+
+[node name="RenderDistanceSlider" type="HSlider" parent="PanelContainer/MarginContainer/HBoxContainer/RenderDistanceVBox" unique_id=2041987003]
+layout_mode = 2
+min_value = 1.0
+max_value = 7.0
+step = 1.0
+value = 3.0

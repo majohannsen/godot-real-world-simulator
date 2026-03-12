@@ -19,6 +19,12 @@ func setPlayerPositionOnZero():
 	if is_instance_valid(car):
 		car.position = Vector3(0, 10, 0)
 
+func shift_player(delta_x: float, delta_z: float):
+	if is_instance_valid(player):
+		player.position += Vector3(delta_x, 0, delta_z)
+	if is_instance_valid(car):
+		car.position += Vector3(delta_x, 0, delta_z)
+
 func getPlayerPosition():
 	if is_instance_valid(car):
 		return car.transform.origin
@@ -28,7 +34,7 @@ func getPlayerPosition():
 func switchToCar():
 	if (!is_instance_valid(car)):
 		car = carPrefab.instantiate()
-		car.transform.origin = Vector3(0,10,0)
+		car.transform.origin = Vector3(0, 10, 0)
 		add_child(car)
 	if is_instance_valid(player):
 		player.queue_free()
@@ -37,7 +43,7 @@ func switchToCar():
 func switchToFlyAround():
 	if (!is_instance_valid(player)):
 		player = playerPrefab.instantiate()
-		player.transform.origin = Vector3(0,50,0)
+		player.transform.origin = Vector3(0, 50, 0)
 		add_child(player)
 	if is_instance_valid(car):
 		car.queue_free()

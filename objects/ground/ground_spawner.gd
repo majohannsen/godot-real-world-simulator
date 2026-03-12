@@ -2,14 +2,9 @@ extends Node
 
 var ground = preload("res://objects/ground/ground.tscn")
 
-@onready var main = get_parent().get_parent()
-
-func spawnGround(chunk: Vector2, container: Node3D):
-	var lat = main.lat_center + main.lat_span * chunk.x
-	var lon = main.lon_center + main.lon_span * chunk.y
-	var coords = main.latLonToCoordsInMeters(lat, lon)
+func spawnGround(_tile: Vector2i, container: Node3D, _tile_center_mx: float, _tile_center_my: float):
 	var inst: StaticBody3D = ground.instantiate()
-	inst.transform.origin = Vector3(coords.x, 0, coords.y)
+	inst.transform.origin = Vector3(0, 0, 0)
 	container.add_child(inst)
 
 func flush_all_instances():

@@ -6,12 +6,15 @@ var rail_shape = preload("res://objects/rail/rail_shape.tscn")
 @onready var main = get_parent().get_parent()
 
 
-func handleData(data: Array, container: Node3D):
+func handleData(data: Array, container: Node3D, tile_center_mx: float, tile_center_my: float):
 	var rails: Array = []
 	for rail in data:
 		var points: Array[Vector2] = []
 		for point in rail["geometry"]:
-			points.append(main.latLonToCoordsInMeters(point["lat"], point["lon"]))
+			points.append(Vector2(
+				main.calculator.latToMeter(point["lat"]) - tile_center_mx,
+				main.calculator.lonToMeter(point["lon"]) - tile_center_my
+			))
 		rails.append(points)
 	for i in rails.size():
 		if i % BATCH_SIZE == 0:

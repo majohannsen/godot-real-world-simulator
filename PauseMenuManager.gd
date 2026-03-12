@@ -11,6 +11,9 @@ extends Control
 @onready var karlsplatzButton = $PanelContainer/MarginContainer/HBoxContainer/LocationsVBox/Karlsplatz
 @onready var viennaHbfButton = $PanelContainer/MarginContainer/HBoxContainer/LocationsVBox/ViennaHbf
 
+@onready var renderDistanceSlider = $PanelContainer/MarginContainer/HBoxContainer/RenderDistanceVBox/RenderDistanceSlider
+@onready var renderDistanceLabel = $PanelContainer/MarginContainer/HBoxContainer/RenderDistanceVBox/RenderDistanceLabel
+
 const gasometer_lat = 47.42380
 const gasometer_lon = 9.65680
 
@@ -35,10 +38,13 @@ func _ready() -> void:
 	lustenauButton.pressed.connect(self.centerOnLustenau)
 	karlsplatzButton.pressed.connect(self.centerOnKarlsplatz)
 	viennaHbfButton.pressed.connect(self.centerOnViennaHbf)
+	renderDistanceSlider.value = get_parent().render_distance
+	renderDistanceSlider.value_changed.connect(self._on_render_distance_changed)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+func _on_render_distance_changed(value: float) -> void:
+	var dist = int(value)
+	get_parent().render_distance = dist
+	renderDistanceLabel.text = "Render distance: %d chunks" % dist
 
 func switchToCar():
 	playerManager.switchToCar()

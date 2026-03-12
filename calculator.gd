@@ -2,24 +2,22 @@ extends Node
 
 # WGS84 equatorial radius — the standard used by Web Mercator (EPSG:3857)
 const EARTH_RADIUS = 6378137.0
-const chunk_size = 1000
-const lat_span = chunk_size / 100000.0
-const lon_span = chunk_size / 100000.0
+const CHUNK_M = 1000.0
 
 func latToMeter(lat):
 	var latInRad = lat * PI / 180.0
 	return EARTH_RADIUS * log(tan(PI / 4.0 + latInRad / 2.0))
 
-func lonToMeter(_lat, lon):
+func lonToMeter(lon):
 	return EARTH_RADIUS * lon * PI / 180.0
 
-# center_x and center_y are 64-bit floats — subtraction is done before packing
-# into Vector2 to avoid the ~1 m precision loss of 32-bit Vector2 at absolute
-# Web Mercator magnitudes (~6 million m).
-func latLonToCoordsInMeters(lat, lon, center_x: float, center_y: float):
-	var rel_x: float = latToMeter(lat) - center_x
-	var rel_y: float = lonToMeter(lat, lon) - center_y
-	return Vector2(rel_x, rel_y)
+func latLonToTile(lat, lon) -> Vector2i:
+	return Vector2i(int(floor(latToMeter(lat) / CHUNK_M)), int(floor(lonToMeter(lon) / CHUNK_M)))
+
+func metersToLatLon(mx: float, my: float) -> Vector2:
+	var lat = (2.0 * atan(exp(mx / EARTH_RADIUS)) - PI / 2.0) * 180.0 / PI
+	var lon = (my / EARTH_RADIUS) * 180.0 / PI
+	return Vector2(lat, lon)
 
 func meterPlusCenterToCoords(lat, lon, center: Vector2, position: Vector2):
 	var new_latitude = lat + ((center.y - position.y) / EARTH_RADIUS) * (180.0 / PI)

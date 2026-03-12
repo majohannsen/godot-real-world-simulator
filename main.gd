@@ -1,12 +1,7 @@
 extends Node
 
-const chunk_size = 1000
-const lat_span = chunk_size / 100000.0
-const lon_span = chunk_size / 100000.0
-
-var lat_center = 48.18574
-var lon_center = 16.413616
-
+const CHUNK_M = 1000.0
+const CENTER_SHIFT_THRESHOLD = 5000.0
 
 @onready var spawner = $Spawner
 @onready var pauseMenu = $PauseMenu
@@ -16,78 +11,50 @@ var lon_center = 16.413616
 
 var loadedChunks: Dictionary = {}
 
-# Store as 64-bit floats rather than Vector2 (which is 32-bit) to preserve
-# sub-meter precision when subtracting from absolute Web Mercator coordinates.
-var center_x: float
-var center_y: float
+# Floating origin in absolute Web Mercator meters (64-bit precision).
+# origin_mx = northing (latToMeter axis), origin_my = easting (lonToMeter axis).
+var origin_mx: float
+var origin_my: float
 
-func latLonToCoordsInMeters(lat, lon):
-	return calculator.latLonToCoordsInMeters(lat, lon, center_x, center_y)
+var render_distance: int = 3
 
-func getChunkWidth():
-	var lat1 = lat_center - lat_span / 2
-	var lat2 = lat_center + lat_span / 2
-	var lon1 = lon_center - lon_span / 2
-	var lon2 = lon_center + lon_span / 2
-	var pos1 = latLonToCoordsInMeters(lat1, lon1)
-	var pos2 = latLonToCoordsInMeters(lat2, lon2)
-	return pos2.x - pos1.x
-
-func getChunkHeight():
-	var lat1 = lat_center - lat_span / 2
-	var lat2 = lat_center + lat_span / 2
-	var lon1 = lon_center - lon_span / 2
-	var lon2 = lon_center + lon_span / 2
-	var pos1 = latLonToCoordsInMeters(lat1, lon1)
-	var pos2 = latLonToCoordsInMeters(lat2, lon2)
-	return pos2.y - pos1.y
-
-## use Web Mercator projection
+func getCurrentTile() -> Vector2i:
+	var pos = playerManager.getPlayerPosition()
+	return Vector2i(int(floor((origin_mx + pos.x) / CHUNK_M)), int(floor((origin_my + pos.z) / CHUNK_M)))
 
 func setNewCenterPosition(lat, lon):
-	lat_center = lat
-	lon_center = lon
-	center_x = calculator.latToMeter(lat)
-	center_y = calculator.lonToMeter(lat, lon)
-	spawner.flush_all_instances()
-	loadedChunks = {}
-	spawnChunk(getCurrentChunk())
+	_recenter(lat, lon)
+	playerManager.setPlayerPositionOnZero()
 
-func spawnChunk(chunk: Vector2):
-	spawner.spawn_chunk(chunk)
+func _recenter(new_lat: float, new_lon: float):
+	var new_mx = calculator.latToMeter(new_lat)
+	var new_my = calculator.lonToMeter(new_lon)
+	var delta_mx = origin_mx - new_mx
+	var delta_my = origin_my - new_my
+	origin_mx = new_mx
+	origin_my = new_my
+	spawner.shift_all_roots(delta_mx, delta_my)
+	playerManager.shift_player(delta_mx, delta_my)
 
-func onChunkLoaded(chunk: Vector2):
-	loadedChunks[chunk] = true
-	print("Spawned chunk: ", chunk)
-
-func getCurrentChunk():
-	var currentChunk = Vector2()
-	var gamecoords = playerManager.getPlayerPosition()
-	var coords = latLonToCoordsInMeters(lat_center, lon_center) + Vector2(gamecoords.x, gamecoords.z)
-	currentChunk.x = round(coords.x / getChunkWidth())
-	currentChunk.y = round(coords.y / getChunkHeight())
-	return currentChunk
+func onChunkLoaded(tile: Vector2i):
+	loadedChunks[tile] = true
+	print("Spawned chunk: ", tile)
 
 func drawDebugChunkOutline():
-	for key in loadedChunks.keys():
-		var chunk = Vector2(key)
-		var lat1 = lat_center - lat_span / 2 + lat_span * chunk.x
-		var lat2 = lat_center + lat_span / 2 + lat_span * chunk.x
-		var lon1 = lon_center - lon_span / 2 + lon_span * chunk.y
-		var lon2 = lon_center + lon_span / 2 + lon_span * chunk.y
-		var pos1 = latLonToCoordsInMeters(lat1, lon1)
-		var pos2 = latLonToCoordsInMeters(lat2, lon2)
-		DebugDraw3D.draw_line(Vector3(pos1.x, 0, pos1.y), Vector3(pos2.x, 0, pos2.y), Color(1, 1, 0))
-		DebugDraw3D.draw_line(Vector3(pos1.x, 0, pos1.y), Vector3(pos1.x, 0, pos2.y), Color(1, 1, 0))
-		DebugDraw3D.draw_line(Vector3(pos1.x, 0, pos1.y), Vector3(pos2.x, 0, pos1.y), Color(1, 1, 0))
-		DebugDraw3D.draw_line(Vector3(pos2.x, 0, pos1.y), Vector3(pos2.x, 0, pos2.y), Color(1, 1, 0))
-		DebugDraw3D.draw_line(Vector3(pos1.x, 0, pos2.y), Vector3(pos2.x, 0, pos2.y), Color(1, 1, 0))
+	for tile in loadedChunks.keys():
+		var p1 = Vector3(tile.x * CHUNK_M - origin_mx, 0, tile.y * CHUNK_M - origin_my)
+		var p2 = Vector3((tile.x + 1) * CHUNK_M - origin_mx, 0, (tile.y + 1) * CHUNK_M - origin_my)
+		DebugDraw3D.draw_line(Vector3(p1.x, 0, p1.z), Vector3(p2.x, 0, p2.z), Color(1, 1, 0))
+		DebugDraw3D.draw_line(Vector3(p1.x, 0, p1.z), Vector3(p1.x, 0, p2.z), Color(1, 1, 0))
+		DebugDraw3D.draw_line(Vector3(p1.x, 0, p1.z), Vector3(p2.x, 0, p1.z), Color(1, 1, 0))
+		DebugDraw3D.draw_line(Vector3(p2.x, 0, p1.z), Vector3(p2.x, 0, p2.z), Color(1, 1, 0))
+		DebugDraw3D.draw_line(Vector3(p1.x, 0, p2.z), Vector3(p2.x, 0, p2.z), Color(1, 1, 0))
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pauseMenu.hide()
-	center_x = calculator.latToMeter(lat_center)
-	center_y = calculator.lonToMeter(lat_center, lon_center)
+	origin_mx = calculator.latToMeter(48.18574)
+	origin_my = calculator.lonToMeter(16.413616)
 	DebugDraw3D.scoped_config().set_thickness(1)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -99,9 +66,29 @@ func _process(_delta):
 		else:
 			pauseMenu.show()
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	var currentChunk = getCurrentChunk()
-	if !loadedChunks.has(currentChunk):
-		loadedChunks[currentChunk] = false # mark as loading to prevent re-triggers
-		spawnChunk(currentChunk)
-	
+
+	var pos = playerManager.getPlayerPosition()
+	if abs(pos.x) > CENTER_SHIFT_THRESHOLD or abs(pos.z) > CENTER_SHIFT_THRESHOLD:
+		var new_latlon = calculator.metersToLatLon(origin_mx + pos.x, origin_my + pos.z)
+		_recenter(new_latlon.x, new_latlon.y)
+
+	var player_tile = getCurrentTile()
+	var desired: Array[Vector2i] = []
+	for dx in range(-render_distance, render_distance + 1):
+		for dy in range(-render_distance, render_distance + 1):
+			desired.append(player_tile + Vector2i(dx, dy))
+
+	for tile in desired:
+		if not loadedChunks.has(tile):
+			loadedChunks[tile] = false
+			spawner.spawn_chunk(tile)
+
+	var to_unload: Array[Vector2i] = []
+	for tile in loadedChunks.keys():
+		if not desired.has(tile):
+			to_unload.append(tile)
+	for tile in to_unload:
+		spawner.unload_chunk(tile)
+		loadedChunks.erase(tile)
+
 	drawDebugChunkOutline()
