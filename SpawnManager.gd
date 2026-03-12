@@ -14,6 +14,7 @@ extends Node3D
 
 var _active_request: HTTPRequest = null
 const MAX_RETRIES = 3
+const RATE_LIMIT_DELAY = 20.0
 const CACHE_DIR = "user://chunk_cache/"
 const CACHE_TTL_SECONDS = 7 * 24 * 3600 # 7 days
 const CHUNK_M = 1000.0
@@ -153,10 +154,17 @@ func _handleCombinedResponse(result, response_code, _headers, body):
 		_active_request = null
 	if result != HTTPRequest.RESULT_SUCCESS or response_code != 200:
 		print("Overpass request failed: result=%d, http=%d" % [result, response_code])
-		_retry_count += 1
-		if _retry_count <= MAX_RETRIES and _pending_url != "":
-			var delay = pow(2, _retry_count - 1) # 1s, 2s, 4s
-			print("Retrying in %ds (attempt %d/%d)..." % [delay, _retry_count, MAX_RETRIES])
+		var is_rate_limited = (response_code == 429)
+		if not is_rate_limited:
+			_retry_count += 1
+		if (is_rate_limited or _retry_count <= MAX_RETRIES) and _pending_url != "":
+			var delay: float
+			if is_rate_limited:
+				delay = RATE_LIMIT_DELAY
+				print("Rate limited (429). Waiting %ds before retrying..." % delay)
+			else:
+				delay = pow(2, _retry_count - 1) # 1s, 2s, 4s
+				print("Retrying in %ds (attempt %d/%d)..." % [delay, _retry_count, MAX_RETRIES])
 			await get_tree().create_timer(delay).timeout
 			if _pending_url != "": # may have been cancelled by flush
 				_doRequest()

@@ -31,7 +31,6 @@ func handleData(data: Array, container: Node3D, tile_center_mx: float, tile_cent
 				if h:
 					height = int(h) * 3
 		heights.append(height)
-	print("Loaded ", houses.size(), " houses")
 	for i in houses.size():
 		if i % 5 == 0:
 			await get_tree().process_frame
@@ -53,7 +52,6 @@ func handleData(data: Array, container: Node3D, tile_center_mx: float, tile_cent
 		inst.add_child(mesh)
 		inst.add_child(collider)
 		container.add_child(inst)
-	print("Spawned ", houses.size(), " houses")
 
 func flush_all_instances():
 	pass

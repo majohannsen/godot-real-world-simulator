@@ -78,6 +78,13 @@ func _process(_delta):
 		for dy in range(-render_distance, render_distance + 1):
 			desired.append(player_tile + Vector2i(dx, dy))
 
+	# Sort closest (Chebyshev) first so nearby chunks load before distant ones.
+	desired.sort_custom(func(a, b):
+		var da = max(abs(a.x - player_tile.x), abs(a.y - player_tile.y))
+		var db = max(abs(b.x - player_tile.x), abs(b.y - player_tile.y))
+		return da < db
+	)
+
 	for tile in desired:
 		if not loadedChunks.has(tile):
 			loadedChunks[tile] = false
