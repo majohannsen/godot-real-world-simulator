@@ -6,7 +6,7 @@ var house = preload("res://objects/house/house.tscn")
 @onready var main = get_parent().get_parent()
 
 
-func handleData(data: Array):
+func handleData(data: Array, container: Node3D):
 	var houses: Array = []
 	var heights: Array = []
 	for building in data:
@@ -28,28 +28,29 @@ func handleData(data: Array):
 				if h:
 					height = int(h) * 3
 		heights.append(height)
+	print("Loaded ", houses.size(), " houses")
 	for i in houses.size():
-		await get_tree().create_timer(0).timeout
-		await spawnHouse(houses[i], heights[i])
-
-func spawnHouse(corners, height):
-	var mesh: CSGPolygon3D = CSGPolygon3D.new()
-	var collider: CollisionPolygon3D = CollisionPolygon3D.new()
-	mesh.mode = CSGPolygon3D.MODE_DEPTH
-	mesh.depth = height;
-	collider.depth = height
-	mesh.rotate_x(PI / 2);
-	collider.rotate_x(PI / 2);
-	mesh.polygon = corners
-	collider.polygon = corners
-	var pos = collider.transform.origin
-	pos.y = height / 2;
-	collider.transform.origin = pos
-	var inst: StaticBody3D = StaticBody3D.new()
-	inst.add_child(mesh)
-	inst.add_child(collider)
-	add_child(inst)
+		if i % 5 == 0:
+			await get_tree().process_frame
+			if not is_instance_valid(container):
+				return
+		var mesh: CSGPolygon3D = CSGPolygon3D.new()
+		var collider: CollisionPolygon3D = CollisionPolygon3D.new()
+		mesh.mode = CSGPolygon3D.MODE_DEPTH
+		mesh.depth = heights[i]
+		collider.depth = heights[i]
+		mesh.rotate_x(PI / 2)
+		collider.rotate_x(PI / 2)
+		mesh.polygon = houses[i]
+		collider.polygon = houses[i]
+		var cpos = collider.transform.origin
+		cpos.y = heights[i] / 2.0
+		collider.transform.origin = cpos
+		var inst: StaticBody3D = StaticBody3D.new()
+		inst.add_child(mesh)
+		inst.add_child(collider)
+		container.add_child(inst)
+	print("Spawned ", houses.size(), " houses")
 
 func flush_all_instances():
-	for child in get_children():
-		child.queue_free()
+	pass

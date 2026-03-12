@@ -55,7 +55,10 @@ func setNewCenterPosition(lat, lon):
 
 func spawnChunk(chunk: Vector2):
 	spawner.spawn_chunk(chunk)
-	
+
+func onChunkLoaded(chunk: Vector2):
+	loadedChunks[chunk] = true
+	print("Spawned chunk: ", chunk)
 
 func getCurrentChunk():
 	var currentChunk = Vector2()
@@ -98,8 +101,7 @@ func _process(_delta):
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	var currentChunk = getCurrentChunk()
 	if !loadedChunks.has(currentChunk):
-		loadedChunks[currentChunk] = true
+		loadedChunks[currentChunk] = false # mark as loading to prevent re-triggers
 		spawnChunk(currentChunk)
-		print("Spawned chunk: ", currentChunk)
 	
 	drawDebugChunkOutline()
