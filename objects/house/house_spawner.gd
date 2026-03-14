@@ -30,6 +30,11 @@ func handleData(data: Array, container: Node3D, tile_center_mx: float, tile_cent
 				var h = building["tags"]["building:levels"]
 				if h:
 					height = int(h) * 3
+		# CSG polygons must have a depth >= 0.001
+		# Also, if float parsing fails for non-numeric strings, height becomes 0.0
+		if height < 0.1:
+			print("Warning: Invalid height '%s' or levels '%s' for building. Using height 0.1." % [building["tags"].get("height", "N/A"), building["tags"].get("building:levels", "N/A")])
+			height = 0.1
 		heights.append(height)
 	for i in houses.size():
 		if i % 5 == 0:
