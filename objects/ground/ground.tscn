@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://b0ui1d7h7cb1y"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_m428k"]
-size = Vector2(2000, 2000)
+size = Vector2(1000, 1000)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pagul"]
-albedo_color = Color(0, 0.462745, 0, 1)
+albedo_color = Color(0.2, 0.36, 0.16, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_c7dny"]
-size = Vector3(2000, 0.1, 2000)
+size = Vector3(1000, 0.1, 1000)
 
 [node name="Ground" type="StaticBody3D" unique_id=16249390]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
