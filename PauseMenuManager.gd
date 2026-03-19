@@ -1,81 +1,116 @@
 extends Control
 
-@onready var playerManager = $"../PlayerManager"
+@export var geoapify_api_key: String = ""
 
-@onready var carButton = $PanelContainer/MarginContainer/HBoxContainer/PlayersVbox/CarButton
-@onready var flyAroundButton = $PanelContainer/MarginContainer/HBoxContainer/PlayersVbox/FlyAroundButton
+@onready var _player_manager = $"../PlayerManager"
 
-@onready var gasometerButton = $PanelContainer/MarginContainer/HBoxContainer/LocationsVBox/Gasometer
-@onready var stefansplatzButton = $PanelContainer/MarginContainer/HBoxContainer/LocationsVBox/Stefansplatz
-@onready var lustenauButton = $PanelContainer/MarginContainer/HBoxContainer/LocationsVBox/Lustenau
-@onready var karlsplatzButton = $PanelContainer/MarginContainer/HBoxContainer/LocationsVBox/Karlsplatz
-@onready var viennaHbfButton = $PanelContainer/MarginContainer/HBoxContainer/LocationsVBox/ViennaHbf
+@onready var _search_input: LineEdit = $PanelContainer/MarginContainer/HBoxContainer/LocationsVBox/SearchInput
+@onready var _status_label: Label = $PanelContainer/MarginContainer/HBoxContainer/LocationsVBox/StatusLabel
+@onready var _favorites_header: Label = $PanelContainer/MarginContainer/HBoxContainer/LocationsVBox/ScrollContainer/ListsContainer/FavoritesHeader
+@onready var _favorites_list: VBoxContainer = $PanelContainer/MarginContainer/HBoxContainer/LocationsVBox/ScrollContainer/ListsContainer/FavoritesList
+@onready var _recents_header: Label = $PanelContainer/MarginContainer/HBoxContainer/LocationsVBox/ScrollContainer/ListsContainer/RecentsHeader
+@onready var _recents_list: VBoxContainer = $PanelContainer/MarginContainer/HBoxContainer/LocationsVBox/ScrollContainer/ListsContainer/RecentsList
+@onready var _search_header: Label = $PanelContainer/MarginContainer/HBoxContainer/LocationsVBox/ScrollContainer/ListsContainer/SearchHeader
+@onready var _search_results_list: VBoxContainer = $PanelContainer/MarginContainer/HBoxContainer/LocationsVBox/ScrollContainer/ListsContainer/SearchResultsList
 
-@onready var renderDistanceSlider = $PanelContainer/MarginContainer/HBoxContainer/RenderDistanceVBox/RenderDistanceSlider
-@onready var renderDistanceLabel = $PanelContainer/MarginContainer/HBoxContainer/RenderDistanceVBox/RenderDistanceLabel
+@onready var _car_button: Button = $PanelContainer/MarginContainer/HBoxContainer/PlayersVbox/CarButton
+@onready var _fly_button: Button = $PanelContainer/MarginContainer/HBoxContainer/PlayersVbox/FlyAroundButton
+@onready var _render_slider: HSlider = $PanelContainer/MarginContainer/HBoxContainer/RenderDistanceVBox/RenderDistanceSlider
+@onready var _render_label: Label = $PanelContainer/MarginContainer/HBoxContainer/RenderDistanceVBox/RenderDistanceLabel
 
-const gasometer_lat = 47.42380
-const gasometer_lon = 9.65680
+@onready var _place_store: Node = $PlaceStore
+@onready var _search_service: Node = $GeoapifySearch
 
-const stefansplatz_lat = 48.208415403250875
-const stefansplatz_lon = 16.37215091689916
+const PlaceRowScene = preload("res://ui/place_row.tscn")
 
-const lustenau_lat = 47.42380
-const lustenau_lon = 9.65680
+var _last_search_results: Array = []
 
-const karlsplatz_lat = 48.1999922
-const karlsplatz_lon = 16.3702657
-
-const viennaHbf_lat = 48.1850709
-const viennaHbf_lon = 16.3763051
-
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	carButton.pressed.connect(self.switchToCar)
-	flyAroundButton.pressed.connect(self.switchToFlyAround)
-	gasometerButton.pressed.connect(self.centerOnGasometer)
-	stefansplatzButton.pressed.connect(self.centerOnStefansplatz)
-	lustenauButton.pressed.connect(self.centerOnLustenau)
-	karlsplatzButton.pressed.connect(self.centerOnKarlsplatz)
-	viennaHbfButton.pressed.connect(self.centerOnViennaHbf)
-	renderDistanceSlider.value = get_parent().render_distance
-	renderDistanceSlider.value_changed.connect(self._on_render_distance_changed)
+	_search_service.geoapify_api_key = geoapify_api_key
+	_search_service.search_completed.connect(_on_search_completed)
+	_search_service.search_failed.connect(_on_search_failed)
+
+	_car_button.pressed.connect(_switch_to_car)
+	_fly_button.pressed.connect(_switch_to_fly)
+	_render_slider.value = get_parent().render_distance
+	_render_slider.value_changed.connect(_on_render_distance_changed)
+	_search_input.text_changed.connect(_on_search_changed)
+
+	_render_lists()
 
 func _on_render_distance_changed(value: float) -> void:
 	var dist = int(value)
 	get_parent().render_distance = dist
-	renderDistanceLabel.text = "Render distance: %d chunks" % dist
+	_render_label.text = "Render distance: %d chunks" % dist
 
-func switchToCar():
-	playerManager.switchToCar()
-	hide()
-
-
-func switchToFlyAround():
-	playerManager.switchToFlyAround()
-	hide()
-	
-func centerOnGasometer():
-	playerManager.setPlayerPositionOnZero()
-	get_parent().setNewCenterPosition(gasometer_lat, gasometer_lon)
-	hide()
-	
-func centerOnStefansplatz():
-	playerManager.setPlayerPositionOnZero()
-	get_parent().setNewCenterPosition(stefansplatz_lat, stefansplatz_lon)
+func _switch_to_car() -> void:
+	_player_manager.switchToCar()
 	hide()
 
-func centerOnLustenau():
-	playerManager.setPlayerPositionOnZero()
-	get_parent().setNewCenterPosition(lustenau_lat, lustenau_lon)
+func _switch_to_fly() -> void:
+	_player_manager.switchToFlyAround()
 	hide()
 
-func centerOnKarlsplatz():
-	playerManager.setPlayerPositionOnZero()
-	get_parent().setNewCenterPosition(karlsplatz_lat, karlsplatz_lon)
+func _on_search_changed(text: String) -> void:
+	_status_label.text = ""
+	var trimmed: String = text.strip_edges()
+	if trimmed.length() < 2:
+		_search_service.cancel()
+		_last_search_results = []
+		_clear_list(_search_results_list)
+		_search_header.visible = false
+		return
+	_search_service.search(trimmed)
+
+func _on_search_completed(results: Array) -> void:
+	_status_label.text = ""
+	_last_search_results = results
+	_render_search_results()
+
+func _on_search_failed(error: String) -> void:
+	_status_label.text = error
+	_last_search_results = []
+	_clear_list(_search_results_list)
+	_search_header.visible = false
+
+func _render_lists() -> void:
+	_clear_list(_favorites_list)
+	_clear_list(_recents_list)
+	var favs: Array = _place_store.get_favorites()
+	var recents: Array = _place_store.get_recents()
+	_favorites_header.visible = favs.size() > 0
+	for place in favs:
+		_add_row(_favorites_list, place)
+	_recents_header.visible = recents.size() > 0
+	for place in recents:
+		_add_row(_recents_list, place)
+	_render_search_results()
+
+func _render_search_results() -> void:
+	_clear_list(_search_results_list)
+	_search_header.visible = _last_search_results.size() > 0
+	for place in _last_search_results:
+		_add_row(_search_results_list, place)
+
+func _add_row(container: VBoxContainer, place: Dictionary) -> void:
+	var row = PlaceRowScene.instantiate()
+	container.add_child(row)
+	row.setup(place, _place_store.is_favorite(place.get("id", "")))
+	row.teleport_requested.connect(_on_teleport_requested)
+	row.favorite_toggled.connect(_on_favorite_toggled)
+
+func _clear_list(container: VBoxContainer) -> void:
+	for child in container.get_children():
+		child.queue_free()
+
+func _on_teleport_requested(place: Dictionary) -> void:
+	_player_manager.setPlayerPositionOnZero()
+	get_parent().setNewCenterPosition(place.get("lat", 0.0), place.get("lon", 0.0))
+	if not place.get("id", "").is_empty():
+		_place_store.add_recent(place)
+	_render_lists()
 	hide()
 
-func centerOnViennaHbf():
-	playerManager.setPlayerPositionOnZero()
-	get_parent().setNewCenterPosition(viennaHbf_lat, viennaHbf_lon)
-	hide()
+func _on_favorite_toggled(place: Dictionary) -> void:
+	_place_store.toggle_favorite(place)
+	_render_lists()
