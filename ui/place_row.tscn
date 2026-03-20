@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://b8hs3gw7tl1xn"]
+
+[ext_resource type="Script" uid="uid://dr9y4jf6nk2m8" path="res://ui/PlaceRow.gd" id="1_plrow"]
+
+[node name="PlaceRow" type="HBoxContainer"]
+script = ExtResource("1_plrow")
+
+[node name="InfoVBox" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NameLabel" type="Label" parent="InfoVBox"]
+layout_mode = 2
+text = "Place Name"
+
+[node name="AddrLabel" type="Label" parent="InfoVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+modulate = Color(0.8, 0.8, 0.8, 1)
+text = ""
+
+[node name="TeleportButton" type="Button" parent="."]
+layout_mode = 2
+text = "Go"
+custom_minimum_size = Vector2(40, 0)
+
+[node name="FavButton" type="Button" parent="."]
+layout_mode = 2
+text = "☆"
+custom_minimum_size = Vector2(36, 0)

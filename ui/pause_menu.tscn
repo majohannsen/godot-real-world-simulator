@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://7if28dqjlfui"]
 
 [ext_resource type="Script" uid="uid://bpm5qk7ttvwy3" path="res://PauseMenuManager.gd" id="1_0tsti"]
+[ext_resource type="Script" uid="uid://cq3xhm7k5bvfa" path="res://PlaceStore.gd" id="2_store"]
+[ext_resource type="Script" uid="uid://bt5w8nz2vpxd6" path="res://GeoapifySearch.gd" id="3_geosrch"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o6jgo"]
 bg_color = Color(0.497788, 0.66368, 0.25706, 1)
@@ -13,6 +15,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_0tsti")
+
+[node name="PlaceStore" type="Node" parent="." unique_id=1682814700]
+script = ExtResource("2_store")
+
+[node name="GeoapifySearch" type="Node" parent="." unique_id=1682814701]
+script = ExtResource("3_geosrch")
 
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=1848784560]
 layout_mode = 1
@@ -44,26 +52,54 @@ size_flags_vertical = 4
 
 [node name="LocationsVBox" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer" unique_id=1701158331]
 layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(320, 0)
 
-[node name="Gasometer" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer/LocationsVBox" unique_id=379581951]
+[node name="SearchInput" type="LineEdit" parent="PanelContainer/MarginContainer/HBoxContainer/LocationsVBox" unique_id=1701158400]
 layout_mode = 2
-text = "Gasometer"
+placeholder_text = "Search places…"
 
-[node name="Stefansplatz" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer/LocationsVBox" unique_id=168336557]
+[node name="StatusLabel" type="Label" parent="PanelContainer/MarginContainer/HBoxContainer/LocationsVBox" unique_id=1701158401]
 layout_mode = 2
-text = "Stefansplatz"
+modulate = Color(1, 0.3, 0.3, 1)
+text = ""
+autowrap_mode = 3
 
-[node name="Lustenau" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer/LocationsVBox" unique_id=833208994]
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/MarginContainer/HBoxContainer/LocationsVBox" unique_id=1701158402]
 layout_mode = 2
-text = "Lustenau"
+size_flags_vertical = 3
+custom_minimum_size = Vector2(0, 250)
 
-[node name="Karlsplatz" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer/LocationsVBox" unique_id=1976293877]
+[node name="ListsContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer/LocationsVBox/ScrollContainer" unique_id=1701158403]
 layout_mode = 2
-text = "Karlsplatz"
+size_flags_horizontal = 3
 
-[node name="ViennaHbf" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer/LocationsVBox" unique_id=1618167080]
+[node name="FavoritesHeader" type="Label" parent="PanelContainer/MarginContainer/HBoxContainer/LocationsVBox/ScrollContainer/ListsContainer" unique_id=1701158404]
 layout_mode = 2
-text = "Vienna Hbf"
+theme_override_font_sizes/font_size = 14
+text = "★ Favorites"
+visible = false
+
+[node name="FavoritesList" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer/LocationsVBox/ScrollContainer/ListsContainer" unique_id=1701158405]
+layout_mode = 2
+
+[node name="RecentsHeader" type="Label" parent="PanelContainer/MarginContainer/HBoxContainer/LocationsVBox/ScrollContainer/ListsContainer" unique_id=1701158406]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "🕐 Recents"
+visible = false
+
+[node name="RecentsList" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer/LocationsVBox/ScrollContainer/ListsContainer" unique_id=1701158407]
+layout_mode = 2
+
+[node name="SearchHeader" type="Label" parent="PanelContainer/MarginContainer/HBoxContainer/LocationsVBox/ScrollContainer/ListsContainer" unique_id=1701158408]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "🔍 Search Results"
+visible = false
+
+[node name="SearchResultsList" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer/LocationsVBox/ScrollContainer/ListsContainer" unique_id=1701158409]
+layout_mode = 2
 
 [node name="PlayersVbox" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer" unique_id=917845204]
 layout_mode = 2

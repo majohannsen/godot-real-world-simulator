@@ -39,6 +39,7 @@ script = ExtResource("3_86kqk")
 [node name="HUD" parent="." unique_id=558261794 instance=ExtResource("4_ddviv")]
 
 [node name="PauseMenu" parent="." unique_id=1937164496 instance=ExtResource("5_61y7o")]
+geoapify_api_key = "e134585c84c0484b8df148266071438e"
 
 [node name="Calculator" type="Node" parent="." unique_id=710820583]
 script = ExtResource("7_g52vg")
