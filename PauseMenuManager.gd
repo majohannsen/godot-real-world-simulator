@@ -59,8 +59,9 @@ func _on_search_changed(text: String) -> void:
 		_last_search_results = []
 		_clear_list(_search_results_list)
 		_search_header.visible = false
-		return
-	_search_service.search(trimmed)
+	else:
+		_search_service.search(trimmed)
+	_render_favs_recents()
 
 func _on_search_completed(results: Array) -> void:
 	_status_label.text = ""
@@ -73,18 +74,32 @@ func _on_search_failed(error: String) -> void:
 	_clear_list(_search_results_list)
 	_search_header.visible = false
 
+func _place_matches(place: Dictionary, filter: String) -> bool:
+	return place.get("name", "").to_lower().contains(filter) \
+		or place.get("city", "").to_lower().contains(filter) \
+		or place.get("address", "").to_lower().contains(filter) \
+		or place.get("country", "").to_lower().contains(filter)
+
 func _render_lists() -> void:
+	_render_favs_recents()
+	_render_search_results()
+
+func _render_favs_recents() -> void:
 	_clear_list(_favorites_list)
 	_clear_list(_recents_list)
+	var filter: String = _search_input.text.strip_edges().to_lower()
+	var filtering: bool = filter.length() >= 2
 	var favs: Array = _place_store.get_favorites()
 	var recents: Array = _place_store.get_recents()
+	if filtering:
+		favs = favs.filter(func(p): return _place_matches(p, filter))
+		recents = recents.filter(func(p): return _place_matches(p, filter))
 	_favorites_header.visible = favs.size() > 0
 	for place in favs:
 		_add_row(_favorites_list, place)
 	_recents_header.visible = recents.size() > 0
 	for place in recents:
 		_add_row(_recents_list, place)
-	_render_search_results()
 
 func _render_search_results() -> void:
 	_clear_list(_search_results_list)
@@ -108,7 +123,12 @@ func _on_teleport_requested(place: Dictionary) -> void:
 	get_parent().setNewCenterPosition(place.get("lat", 0.0), place.get("lon", 0.0))
 	if not place.get("id", "").is_empty():
 		_place_store.add_recent(place)
+	_search_service.cancel()
+	_search_input.text = ""
+	_last_search_results = []
+	_status_label.text = ""
 	_render_lists()
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	hide()
 
 func _on_favorite_toggled(place: Dictionary) -> void:

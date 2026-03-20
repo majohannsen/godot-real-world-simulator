@@ -67,6 +67,9 @@ func _process(_delta):
 			pauseMenu.show()
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
+	if pauseMenu.visible:
+		return
+
 	var pos = playerManager.getPlayerPosition()
 	if abs(pos.x) > CENTER_SHIFT_THRESHOLD or abs(pos.z) > CENTER_SHIFT_THRESHOLD:
 		var new_latlon = calculator.metersToLatLon(origin_mx + pos.x, origin_my + pos.z)
