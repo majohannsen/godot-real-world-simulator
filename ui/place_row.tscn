@@ -5,20 +5,26 @@
 [node name="PlaceRow" type="HBoxContainer"]
 script = ExtResource("1_plrow")
 mouse_default_cursor_shape = 2
+clip_contents = true
 
 [node name="InfoVBox" type="VBoxContainer" parent="."]
 layout_mode = 2
 size_flags_horizontal = 3
+clip_contents = true
 
 [node name="NameLabel" type="Label" parent="InfoVBox"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Place Name"
+clip_text = true
 
 [node name="AddrLabel" type="Label" parent="InfoVBox"]
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 11
 modulate = Color(0.8, 0.8, 0.8, 1)
 text = ""
+clip_text = true
 
 [node name="FavButton" type="Button" parent="."]
 layout_mode = 2
