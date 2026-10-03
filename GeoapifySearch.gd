@@ -44,7 +44,7 @@ func _on_debounce_timeout() -> void:
 
 func _do_search(query: String) -> void:
 	if geoapify_api_key.is_empty():
-		search_failed.emit("API key not set. Add it to the PauseMenu node in the Inspector.")
+		search_failed.emit("API key not set. Add the file geoapify_api_key.txt in the .secrets folder.")
 		return
 	_cancel_request()
 	_active_query = query
