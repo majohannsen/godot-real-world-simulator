@@ -3,18 +3,20 @@ extends HBoxContainer
 signal teleport_requested(place: Dictionary)
 signal favorite_toggled(place: Dictionary)
 
+const MAX_NAME_CHARS := 40
+const MAX_ADDRESS_CHARS := 56
+
 var place: Dictionary = {}
 var _is_favorite: bool = false
 
 @onready var _name_label: Label = $InfoVBox/NameLabel
 @onready var _addr_label: Label = $InfoVBox/AddrLabel
-@onready var _teleport_btn: Button = $TeleportButton
 @onready var _fav_btn: Button = $FavButton
 
 func setup(p: Dictionary, is_fav: bool) -> void:
 	place = p
 	_is_favorite = is_fav
-	_name_label.text = p.get("name", "Unknown")
+	_name_label.text = _truncate_text(p.get("name", "Unknown"), MAX_NAME_CHARS)
 	var city: String = p.get("city", "")
 	var country: String = p.get("country", "")
 	var address: String = p.get("address", "")
@@ -30,7 +32,7 @@ func setup(p: Dictionary, is_fav: bool) -> void:
 		location_str = country
 	if not location_str.is_empty():
 		addr_parts.append(location_str)
-	_addr_label.text = ", ".join(addr_parts)
+	_addr_label.text = _truncate_text(", ".join(addr_parts), MAX_ADDRESS_CHARS)
 	_addr_label.visible = not _addr_label.text.is_empty()
 	_update_fav_button()
 
@@ -42,5 +44,20 @@ func _update_fav_button() -> void:
 	_fav_btn.text = "★" if _is_favorite else "☆"
 
 func _ready() -> void:
-	_teleport_btn.pressed.connect(func(): teleport_requested.emit(place))
+	gui_input.connect(_on_gui_input)
 	_fav_btn.pressed.connect(func(): favorite_toggled.emit(place))
+
+func _on_gui_input(event: InputEvent) -> void:
+	var mouse_event := event as InputEventMouseButton
+	if mouse_event == null:
+		return
+	if mouse_event.button_index != MOUSE_BUTTON_LEFT or not mouse_event.pressed:
+		return
+	if _fav_btn.get_global_rect().has_point(mouse_event.global_position):
+		return
+	teleport_requested.emit(place)
+
+func _truncate_text(value: String, max_chars: int) -> String:
+	if value.length() <= max_chars:
+		return value
+	return value.substr(0, max_chars - 1) + "…"

@@ -4,6 +4,7 @@
 
 [node name="PlaceRow" type="HBoxContainer"]
 script = ExtResource("1_plrow")
+mouse_default_cursor_shape = 2
 
 [node name="InfoVBox" type="VBoxContainer" parent="."]
 layout_mode = 2
@@ -18,11 +19,6 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 11
 modulate = Color(0.8, 0.8, 0.8, 1)
 text = ""
-
-[node name="TeleportButton" type="Button" parent="."]
-layout_mode = 2
-text = "Go"
-custom_minimum_size = Vector2(40, 0)
 
 [node name="FavButton" type="Button" parent="."]
 layout_mode = 2
