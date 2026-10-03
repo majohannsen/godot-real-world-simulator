@@ -1,6 +1,7 @@
 extends Control
 
 @export var geoapify_api_key: String = ""
+const LOCAL_GEOAPIFY_KEY_FILE := "res://.secrets/geoapify_api_key.txt"
 
 @onready var _player_manager = $"../PlayerManager"
 
@@ -26,6 +27,7 @@ const PlaceRowScene = preload("res://ui/place_row.tscn")
 var _last_search_results: Array = []
 
 func _ready() -> void:
+	_load_geoapify_api_key()
 	_search_service.geoapify_api_key = geoapify_api_key
 	_search_service.search_completed.connect(_on_search_completed)
 	_search_service.search_failed.connect(_on_search_failed)
@@ -37,6 +39,17 @@ func _ready() -> void:
 	_search_input.text_changed.connect(_on_search_changed)
 
 	_render_lists()
+
+func _load_geoapify_api_key() -> void:
+	if not geoapify_api_key.is_empty():
+		return
+	var key_file := ProjectSettings.globalize_path(LOCAL_GEOAPIFY_KEY_FILE)
+	if not FileAccess.file_exists(key_file):
+		return
+	var file := FileAccess.open(key_file, FileAccess.READ)
+	if file == null:
+		return
+	geoapify_api_key = file.get_as_text().strip_edges()
 
 func _on_render_distance_changed(value: float) -> void:
 	var dist = int(value)
