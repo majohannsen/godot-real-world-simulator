@@ -1,6 +1,7 @@
 extends Node
 
 const DEFAULT_HEIGHT = 12
+const DEFAULT_LEVEL_HEIGHT = 3
 var house = preload("res://objects/house/house.tscn")
 
 @onready var main = get_parent().get_parent()
@@ -29,7 +30,7 @@ func handleData(data: Array, container: Node3D, tile_center_mx: float, tile_cent
 			elif building["tags"].has("building:levels"):
 				var h = building["tags"]["building:levels"]
 				if h:
-					height = int(h) * 3
+					height = int(h) * DEFAULT_LEVEL_HEIGHT
 		# CSG polygons must have a depth >= 0.001
 		# Also, if float parsing fails for non-numeric strings, height becomes 0.0
 		if height < 0.1:
